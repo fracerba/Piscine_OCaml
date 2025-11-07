@@ -4,12 +4,10 @@ let ft_rot_n n s =
 	in let shift c = 
 		if c >= 'A' && c <= 'Z' then 
 			shift_char c n 65
-		else begin
-			if c >= 'a' && c <= 'z' then
-				shift_char c n 97
-			else
-				c
-		end
+		else if c >= 'a' && c <= 'z' then
+			shift_char c n 97
+		else
+			c
 	in String.map shift s
 
 let () =
