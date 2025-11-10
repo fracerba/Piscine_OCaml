@@ -1,8 +1,8 @@
 let rec ft_power n e =
-	if e > 0 then
-		n * (ft_power n (e - 1))
-	else
+	if e <= 0 then
 		1
+	else
+		n * (ft_power n (e - 1))
 
 let () =
 	print_int (ft_power 5 2);
