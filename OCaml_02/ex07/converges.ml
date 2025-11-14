@@ -7,17 +7,6 @@ let rec converges f x n =
 		converges f (f x) (n - 1)
 
 let () =
-	if converges (( * ) 2) 2 5 then 
-		print_endline "true"
-	else
-		print_endline "false";
-
-  if converges (fun x -> x / 2) 2 3  then 
-		print_endline "true"
-	else
-		print_endline "false";
-
-  if converges (fun x -> x / 2) 2 2  then 
-		print_endline "true"
-	else
-		print_endline "false"
+	print_endline (string_of_bool (converges (( * ) 2) 2 5));
+  print_endline (string_of_bool (converges (fun x -> x / 2) 2 3 ));
+  print_endline (string_of_bool (converges (fun x -> x / 2) 2 2 ))

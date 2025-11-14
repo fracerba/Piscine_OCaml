@@ -13,12 +13,5 @@ let ft_string_all func s =
 let is_digit c = c >= '0' && c <= '9'
 
 let () =
-	if ft_string_all is_digit "0123456789" then
-		print_endline "true"
-	else
-		print_endline "false";
-
-	if ft_string_all is_digit "O12EAS67B9" then
-		print_endline "true"
-	else
-		print_endline "false"
+	print_endline (string_of_bool (ft_string_all is_digit "0123456789"));
+	print_endline (string_of_bool (ft_string_all is_digit "O12EAS67B9"))

@@ -3,7 +3,6 @@ let encode l =
 		match l with
 			| [] -> []
 			| h :: i :: t when h = i -> loop (i :: t) (n + 1)
-			| h :: i :: t when h <> i -> (n, h) :: loop (i :: t) 1
 			| h :: t -> (n, h) :: loop t 1
 	in loop l 1
 
@@ -12,37 +11,31 @@ let print_tuple_first a =
 	print_int a;
 	print_string ", "
 
-let print_semicolon n =
+let print_tuple_second n =
 	if n = 0 then
 		print_string "); "
 	else
 		print_string ");"
 
-let print_bool b =
-	if b then
-		print_string "true"
-	else
-		print_string "false"
-
 let print_tuple_bool (a, b) n =
 	print_tuple_first a;
-	print_bool b;
-	print_semicolon n
+	print_string (string_of_bool b);
+	print_tuple_second n
 
 let print_tuple_char (a, b) n =
 	print_tuple_first a;
 	print_char b;
-	print_semicolon n
+	print_tuple_second n
 
 let print_tuple_int (a, b) n =
 	print_tuple_first a;
 	print_int b;
-	print_semicolon n
+	print_tuple_second n
 
 let print_tuple_string (a, b) n =
 	print_tuple_first a;
 	print_string b;
-	print_semicolon n
+	print_tuple_second n
 
 let print_list_bool l =
 	print_char '[';

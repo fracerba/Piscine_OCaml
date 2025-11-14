@@ -7,7 +7,7 @@ let crossover l m =
 	in let rec loop l a =
 		match l with
 			| [] -> []
-			| h :: t when search m h = true && search a h = false -> h :: loop t (h :: a)
+			| h :: t when (search m h) && not (search a h) -> h :: loop t (h :: a)
 			| _ :: t -> loop t a 
 	in loop l []
 
@@ -17,14 +17,8 @@ let print_semicolon n =
 	else
 		print_string ";"
 
-let print_bool b =
-	if b then
-		print_string "true"
-	else
-		print_string "false"
-
 let print_value_bool b n =
-	print_bool b;
+	print_string (string_of_bool b);
 	print_semicolon n
 
 let print_value_char b n =

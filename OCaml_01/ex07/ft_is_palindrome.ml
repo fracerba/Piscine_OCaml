@@ -13,22 +13,7 @@ let ft_is_palindrome s =
 	in check_limits 0 (String.length s - 1)
 
 let () =
-	if ft_is_palindrome "radar" then 
-		print_endline "true"
-	else
-		print_endline "false";
-
-	if ft_is_palindrome "madam" then 
-		print_endline "true"
-	else
-		print_endline "false";
-
-	if ft_is_palindrome "car" then 
-		print_endline "true"
-	else
-		print_endline "false";
-
-	if ft_is_palindrome "" then 
-		print_endline "true"
-	else
-		print_endline "false"
+	print_endline (string_of_bool (ft_is_palindrome "radar"));
+	print_endline (string_of_bool (ft_is_palindrome "madam"));
+	print_endline (string_of_bool (ft_is_palindrome "car"));
+	print_endline (string_of_bool (ft_is_palindrome ""))
