@@ -3,8 +3,6 @@ let rec iter f x n =
 		-1
 	else if n = 0 then
 		x
-	else if n = 1 then
-		f x
 	else
 		iter f (f x) (n - 1)
 
