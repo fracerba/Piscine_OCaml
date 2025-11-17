@@ -15,7 +15,7 @@ let print_tuple_second n =
 	if n = 0 then
 		print_string "); "
 	else
-		print_string ");"
+		print_string ")"
 
 let print_tuple_bool (a, b) n =
 	print_tuple_first a;
@@ -86,9 +86,9 @@ let print_list_string l =
 	print_string "]\n"
 
 let () =
-	print_list_int (encode [1; 2; 3;]);
-	print_list_int (encode [1; 1; 2; 2; 2; 3; 5; 5;]);
-	print_list_char (encode ['a'; 'b'; 'b'; 'a'; 'a';]);
-	print_list_bool (encode [false; false; true; false; true; true; false;]);
-	print_list_string (encode ["cat"; "cat"; "cat"; "dog"; "dog"; "cat";]);
+	print_list_int (encode [1; 2; 3]);
+	print_list_int (encode [1; 1; 2; 2; 2; 3; 5; 5]);
+	print_list_char (encode ['a'; 'b'; 'b'; 'a'; 'a']);
+	print_list_bool (encode [false; false; true; false; true; true; false]);
+	print_list_string (encode ["cat"; "cat"; "cat"; "dog"; "dog"; "cat"]);
 	print_list_int (encode [])

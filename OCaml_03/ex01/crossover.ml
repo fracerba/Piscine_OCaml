@@ -14,8 +14,6 @@ let crossover l m =
 let print_semicolon n =
 	if n = 0 then
 		print_string "; "
-	else
-		print_string ";"
 
 let print_value_bool b n =
 	print_string (string_of_bool b);
@@ -82,10 +80,10 @@ let print_list_string l =
 	print_string "]\n"
 
 let () =
-	print_list_int (crossover [1; 2; 3;] [1; 4; 5; 3;]);
-	print_list_int (crossover [1; 1; 2; 2; 3; 5; 5;] [2; 5; 3;]);
-	print_list_char (crossover ['a'; 'b'; 'c'; 'd'; 'e';] ['a'; 's'; 'd';]);
-	print_list_bool (crossover [false; false; true; false; true; true; false;] [false;]);
-	print_list_string (crossover ["cat"; "dog";] ["cat"; "car"; "card"; "dog"; "dig"; "data";]);
-	print_list_int (crossover [0; 3;] [1; 2;]);
-	print_list_int (crossover [] [1; 2;])
+	print_list_int (crossover [1; 2; 3] [1; 4; 5; 3]);
+	print_list_int (crossover [1; 1; 2; 2; 3; 5; 5] [2; 5; 3]);
+	print_list_char (crossover ['a'; 'b'; 'c'; 'd'; 'e'] ['a'; 's'; 'd']);
+	print_list_bool (crossover [false; false; true; false; true; true; false] [false]);
+	print_list_string (crossover ["cat"; "dog"] ["cat"; "car"; "card"; "dog"; "dig"; "data"]);
+	print_list_int (crossover [0; 3] [1; 2]);
+	print_list_int (crossover [] [1; 2])
