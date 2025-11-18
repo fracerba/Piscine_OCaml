@@ -17,7 +17,7 @@ type nucleotide = {
 
 type helix = nucleotide list
 
-let generate_nucleotide b = {
+let generate_nucleotide b : nucleotide = {
 	phosphate = "phosphate";
 	deoxyribose = "deoxyribose";
 	nucleobase = match b with
@@ -28,7 +28,7 @@ let generate_nucleotide b = {
 		| _ -> None
 }
 
-let rec generate_helix n =
+let rec generate_helix n : helix =
 	let random_gen () =
 		Random.self_init ();
 		match Random.int 4 with
@@ -44,7 +44,7 @@ let rec generate_helix n =
 			loop (n - 1) (random_gen () :: l)
 	in loop n []
 
-let rec helix_to_string hlx =
+let rec helix_to_string (hlx : helix) =
 	let get_nucleobase n =
 		match n.nucleobase with
 			| A -> "A"
@@ -56,7 +56,7 @@ let rec helix_to_string hlx =
 		| [] -> ""
 		| h :: t -> get_nucleobase h ^ helix_to_string t
 
-let rec complementary_helix hlx =
+let rec complementary_helix (hlx : helix) : helix =
 	let complementary_nucleobase n =
 		match n.nucleobase with
 			| A -> generate_nucleotide 'T'
