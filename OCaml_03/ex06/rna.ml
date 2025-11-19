@@ -97,11 +97,11 @@ let () =
 			| h :: t -> get_nucleobase h ^ rna_to_string t
 	in let a = generate_helix 5
 	in let b = generate_helix 7
-	in print_endline (helix_to_string a);
-	print_endline (helix_to_string (complementary_helix a));
-	print_endline (rna_to_string (generate_rna a));
+	in print_endline ("DNA: " ^ (helix_to_string a));
+	print_endline ("     " ^ (helix_to_string (complementary_helix a)));
+	print_endline ("RNA: " ^ (rna_to_string (generate_rna a)));
 	print_char '\n';
 
-	print_endline (helix_to_string b);
-	print_endline (helix_to_string (complementary_helix b));
-	print_endline (rna_to_string (generate_rna b));
+	print_endline ("DNA: " ^ (helix_to_string b));
+	print_endline ("     " ^ (helix_to_string (complementary_helix b)));
+	print_endline ("RNA: " ^ (rna_to_string (generate_rna b)));
