@@ -58,7 +58,6 @@ let generate_nucleotide b : nucleotide = {
 
 let rec generate_helix n : helix =
 	let random_gen () =
-		Random.self_init ();
 		match Random.int 4 with
 			| 0 -> generate_nucleotide 'A'
 			| 1 -> generate_nucleotide 'T'
@@ -70,7 +69,8 @@ let rec generate_helix n : helix =
 			l
 		else
 			loop (n - 1) (random_gen () :: l)
-	in loop n []
+	in Random.self_init ();
+	loop n []
 
 let rec helix_to_string (hlx : helix) =
 	let get_nucleobase n =
@@ -112,46 +112,45 @@ let rec generate_bases_triplets (mrna : rna) : (nucleobase * nucleobase * nucleo
 	match mrna with
 		| [] -> []
 		| h :: i :: j :: t -> (h, i, j) :: generate_bases_triplets t
-		| h :: t -> generate_bases_triplets t
+		| h :: t -> []
 
 let decode_arn (mrna : rna) : protein =
 	let get_aminoacid a =
 		match a with
-			| (U, U, a) when a = U || a = C -> Phe
-			| (U, U, _) -> Leu
-			| (C, U, _) -> Leu
-			| (A, U, a) when a <> G -> Ile
+			| (U, U, U) | (U, U, C) -> Phe
+			| (U, U, A) | (U, U, G) | (C, U, U) | (C, U, C) | (C, U, A) | (C, U, G) -> Leu
+			| (A, U, U) | (A, U, C) | (A, U, A) -> Ile
 			| (A, U, G) -> Met
-			| (G, U, _) -> Val
+			| (G, U, U) | (G, U, C) | (G, U, A) | (G, U, G) -> Val
 
-			| (U, C, _) -> Ser
-			| (C, C, _) -> Pro
-			| (A, C, _) -> Thr
-			| (G, C, _) -> Ala
+			| (U, C, U) | (U, C, C) | (U, C, A) | (U, C, G) -> Ser
+			| (C, C, U) | (C, C, C) | (C, C, A) | (C, C, G) -> Pro
+			| (A, C, U) | (A, C, C) | (A, C, A) | (A, C, G) -> Thr
+			| (G, C, U) | (G, C, C) | (G, C, A) | (G, C, G) -> Ala
 
-			| (U, A, a) when a = U || a = C -> Tyr
-			| (U, A, _) -> Stop
-			| (C, A, a) when a = U || a = C -> His
-			| (C, A, _) -> Gln
-			| (A, A, a) when a = U || a = C -> Asn
-			| (A, A, _) -> Lys
-			| (G, A, a) when a = U || a = C -> Asp
-			| (G, A, _) -> Glu
+			| (U, A, U) | (U, A, C) -> Tyr
+			| (U, A, A) | (U, A, G) -> Stop
+			| (C, A, U) | (C, A, C) -> His
+			| (C, A, A) | (C, A, G) -> Gln
+			| (A, A, U) | (A, A, C) -> Asn
+			| (A, A, A) | (A, A, G) -> Lys
+			| (G, A, U) | (G, A, C) -> Asp
+			| (G, A, A) | (G, A, G) -> Glu
 
-			| (U, G, a) when a = U || a = C -> Cys
+			| (U, G, U) | (U, G, C) -> Cys
 			| (U, G, A) -> Stop
 			| (U, G, G) -> Trp
-			| (C, G, _) -> Arg
-			| (A, G, a) when a = U || a = C -> Ser
-			| (A, G, _) -> Arg
-			| (G, G, _) -> Gly
+			| (C, G, U) | (C, G, C) | (C, G, A) | (C, G, G) -> Arg
+			| (A, G, U) | (A, G, C) -> Ser
+			| (A, G, A) | (A, G, G) -> Arg
+			| (G, G, U) | (G, G, C) | (G, G, A) | (G, G, G) -> Gly
 
 			| (_, _, _) -> Stop
 	in let rec loop l =
 		match l with
 			| [] -> [] 
-			| h :: t when get_aminoacid h <> Stop -> get_aminoacid h :: loop t
-			| h :: t -> get_aminoacid h :: []
+			| h :: t when get_aminoacid h = Stop -> []
+			| h :: t -> get_aminoacid h :: loop t
 	in loop (generate_bases_triplets mrna)
 
 let rec string_of_protein (p : protein) =
@@ -184,31 +183,24 @@ let rec string_of_protein (p : protein) =
 		| h :: t -> get_aminoacid h ^ string_of_protein t
 
 let () =
-	let rec rna_to_string (l : rna) =
-		let get_nucleobase b =
-			match b with
-				| A -> "A"
-				| U -> "U"
-				| C -> "C"
-				| G -> "G"
-				| _ -> "N"
-		in match l with
+	let get_nucleobase b =
+		match b with
+			| A -> "A"
+			| U -> "U"
+			| C -> "C"
+			| G -> "G"
+			| _ -> "N"
+	in let rec rna_to_string (l : rna) =
+		match l with
 			| [] -> ""
 			| h :: t -> get_nucleobase h ^ rna_to_string t
+	in let get_triplet t =
+		match t with
+			| (a, b, c) -> get_nucleobase a ^ get_nucleobase b ^ get_nucleobase c
 	in let rec triplets_to_string (l : (nucleobase * nucleobase * nucleobase) list) =
-		let get_nucleobase n =
-			match n with
-				| A -> "A"
-				| U -> "U"
-				| C -> "C"
-				| G -> "G"
-				| _ -> "N"
-		in let get_triplet t =
-			match t with
-				| (a, b, c) -> get_nucleobase a ^ get_nucleobase b ^ get_nucleobase c
-		in match l with
-				| [] -> ""
-				| h :: t -> get_triplet h ^ " " ^ triplets_to_string t
+		match l with
+			| [] -> ""
+			| h :: t -> get_triplet h ^ " " ^ triplets_to_string t
 	in let a = generate_helix 25
 	in let ac = complementary_helix a
 	in let ar = generate_rna a

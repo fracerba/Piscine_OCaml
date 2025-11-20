@@ -33,7 +33,6 @@ let generate_nucleotide b : nucleotide = {
 
 let rec generate_helix n : helix =
 	let random_gen () =
-		Random.self_init ();
 		match Random.int 4 with
 			| 0 -> generate_nucleotide 'A'
 			| 1 -> generate_nucleotide 'T'
@@ -45,7 +44,8 @@ let rec generate_helix n : helix =
 			l
 		else
 			loop (n - 1) (random_gen () :: l)
-	in loop n []
+	in Random.self_init ();
+	loop n []
 
 let rec helix_to_string (hlx : helix) =
 	let get_nucleobase n =
@@ -84,15 +84,15 @@ let rec generate_rna (hlx : helix) : rna =
 		| h :: t -> complementary_rna h :: generate_rna t
 
 let () =
-	let rec rna_to_string (l : rna) =
-		let get_nucleobase b =
-			match b with
-				| A -> "A"
-				| U -> "U"
-				| C -> "C"
-				| G -> "G"
-				| _ -> "N"
-		in match l with
+	let get_nucleobase b =
+		match b with
+			| A -> "A"
+			| U -> "U"
+			| C -> "C"
+			| G -> "G"
+			| _ -> "N"
+	in let rec rna_to_string (l : rna) =
+		match l with
 			| [] -> ""
 			| h :: t -> get_nucleobase h ^ rna_to_string t
 	in let a = generate_helix 5

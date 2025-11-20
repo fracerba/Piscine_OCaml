@@ -8,5 +8,5 @@ let rec converges f x n =
 
 let () =
 	print_endline (string_of_bool (converges (( * ) 2) 2 5));
-  print_endline (string_of_bool (converges (fun x -> x / 2) 2 3 ));
-  print_endline (string_of_bool (converges (fun x -> x / 2) 2 2 ))
+	print_endline (string_of_bool (converges (fun x -> x / 2) 2 3 ));
+	print_endline (string_of_bool (converges (fun x -> x / 2) 2 2 ))
