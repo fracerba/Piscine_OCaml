@@ -7,12 +7,12 @@ let () =
 		print_string "\ntoStringVerbose: ";
 		print_endline (Value.toStringVerbose c);
 		print_string "next: ";
-		if c <> As then
+		if c <> Value.As then
 			print_endline (Value.toString (Value.next c))
 		else
 			print_endline "No next for As";
 		print_string "previous: ";
-		if c <> T2 then
+		if c <> Value.T2 then
 			print_endline (Value.toString (Value.previous c))
 		else
 			print_endline "No previous for 2";

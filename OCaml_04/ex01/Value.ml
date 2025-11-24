@@ -1,17 +1,4 @@
-type t =
-	| T2 
-	| T3 
-	| T4 
-	| T5 
-	| T6 
-	| T7 
-	| T8 
-	| T9 
-	| T10 
-	| Jack 
-	| Queen 
-	| King 
-	| As
+type t = T2 | T3 | T4 | T5 | T6 | T7 | T8 | T9 | T10 | Jack | Queen | King | As
 
 let all : t list = [T2; T3; T4; T5; T6; T7; T8; T9; T10; Jack; Queen; King; As]
 
