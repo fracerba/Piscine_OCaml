@@ -1,5 +1,5 @@
 module Color = struct
-  type t = Spade | Heart | Diamond | Club
+	type t = Spade | Heart | Diamond | Club
 
 	let all : t list = [Spade; Heart; Diamond; Club]
 
@@ -110,24 +110,24 @@ let newCard (v : Value.t) (c : Color.t) : t =
 	(v, c)
 
 let allSpades : t list =
-	let apply (a : Value.t) = 
+	let apply_color (a : Value.t) = 
 		(a, Color.Spade)
-	in List.map apply Value.all
+	in List.map apply_color Value.all
 
 let allHearts : t list =
-	let apply (a : Value.t) = 
+	let apply_color (a : Value.t) = 
 		(a, Color.Heart)
-	in List.map apply Value.all
+	in List.map apply_color Value.all
 
 let allDiamonds : t list =
-	let apply (a : Value.t) = 
+	let apply_color (a : Value.t) = 
 		(a, Color.Diamond)
-	in List.map apply Value.all
+	in List.map apply_color Value.all
 
 let allClubs : t list =
-	let apply (a : Value.t) = 
+	let apply_color (a : Value.t) = 
 		(a, Color.Club)
-	in List.map apply Value.all
+	in List.map apply_color Value.all
 
 let all : t list = allSpades @ allHearts @ allDiamonds @ allClubs
 
@@ -144,7 +144,12 @@ let toStringVerbose (c : t) : string =
 	"Card(" ^ (Value.toStringVerbose (fst c)) ^ ", " ^ (Color.toStringVerbose (snd c)) ^ ")"
 
 let compare (a : t) (b : t) : int =
-	(Value.toInt (fst a)) - (Value.toInt (fst b))
+	if a > b then
+		1
+	else if a = b then
+		0
+	else
+		-1
 
 let max (a : t) (b : t) : t =
 	if (Value.toInt (fst a)) < (Value.toInt (fst b)) then
@@ -159,26 +164,21 @@ let min (a : t) (b : t) : t =
 		a
 
 let best (l : t list) : t =
-	let max (a : t) (b : t) : t =
-		if (Value.toInt (fst a)) < (Value.toInt (fst b)) then
-			b
-		else
-			a
-	in match l with 
+	match l with 
 		| [] -> invalid_arg "Card.best: empty list"
-		| h :: t -> List.fold_left max h l
+		| h :: t -> List.fold_left max h t
 
-let isOf (a : t) (c : Color.t) : bool =
-	(snd a) = c
+let isOf (c : t) (clr : Color.t) : bool =
+	snd c = clr
 
-let isSpade (a : t) : bool =
-	(snd a) = Color.Spade
+let isSpade (c : t) : bool =
+	snd c = Color.Spade
 
-let isHeart (a : t) : bool =
-	(snd a) = Color.Heart
+let isHeart (c : t) : bool =
+	snd c = Color.Heart
 
-let isDiamond (a : t) : bool =
-	(snd a) = Color.Diamond
+let isDiamond (c : t) : bool =
+	snd c = Color.Diamond
 
-let isClub (a : t) : bool =
-	(snd a) = Color.Club
+let isClub (c : t) : bool =
+	snd c = Color.Club

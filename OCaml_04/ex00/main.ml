@@ -4,6 +4,7 @@ let () =
 		print_endline (Color.toString c);
 		print_string "toStringVerbose: ";
 		print_endline (Color.toStringVerbose c);
+		print_newline ();
 	in let rec loop l =
 		match l with
 			| [] -> ()
