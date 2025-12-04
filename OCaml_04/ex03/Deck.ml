@@ -191,7 +191,7 @@ let newDeck () : t =
 	let rec create_deck l =
 		match l with
 			| [] -> []
-			| h :: t -> ((Random.int 200), h) :: create_deck t
+			| h :: t -> ((Random.int 10000), h) :: create_deck t
 	in let rec loop d =
 		match d with
 			| [] -> []

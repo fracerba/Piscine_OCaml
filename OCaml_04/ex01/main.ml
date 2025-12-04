@@ -12,7 +12,7 @@ let print_value c =
 		print_endline (Value.toString (Value.next c))
 	else
 		print_endline "No next for As";
-	print_newline ();
+	print_newline ()
 
 let () =
 	let rec loop l =

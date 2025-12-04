@@ -23,18 +23,18 @@ let print_card c =
 	print_newline ();
 	print_endline ("Card.getValue: " ^ (Card.Value.toString (Card.getValue c)));
 	print_endline ("Card.getColor: " ^ (Card.Color.toString (Card.getColor c)));
-	print_endline "\n";
+	print_endline "\n"
 
 let print_card_pair a b =
 	print_endline ("Cards: " ^ (Card.toString a) ^ " " ^ (Card.toString b));
 	print_endline ("Card.compare: " ^ (string_of_int (Card.compare a b)));
 	print_endline ("Card.max: " ^ (Card.toString (Card.max a b)));
 	print_endline ("Card.min: " ^ (Card.toString (Card.min a b)));
-	print_newline ();
+	print_newline ()
 
-let cards () = Card.all
+let cards = Card.all
 
-let deck () =
+let deck =
 	let rec deck_fib n l =
 		if (fibonacci n) >= 52 then
 			l
