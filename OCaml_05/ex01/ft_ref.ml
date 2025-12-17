@@ -1,0 +1,20 @@
+type 'a ft_ref = {
+	mutable contents : 'a;
+}
+
+let return (a : 'a) : 'a ft_ref = 
+	{
+		contents = a
+	}
+
+let get: (a : 'a ft_ref) : 'a =
+	a.contents
+
+let set: (a : 'a ft_ref) (b : 'a) : () = 
+	a.contents <- b
+
+let bind: (a : 'a ft_ref) (f : 'a -> 'b ft_ref) : 'b ft_ref =
+	f a.contents
+
+let () = 
+	
