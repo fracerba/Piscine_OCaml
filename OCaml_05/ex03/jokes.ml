@@ -24,4 +24,4 @@ let () =
 		end
 	end
 	else
-		print_endline	"Error: invalid arguments"
+		print_endline "Error: invalid arguments"
