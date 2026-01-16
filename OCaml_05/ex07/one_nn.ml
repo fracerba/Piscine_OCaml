@@ -23,10 +23,10 @@ let print_radar (e : radar) =
 	let print_array (a : float array) =
 		print_string "([|";
 		for i = 0 to (Array.length a) - 2 do begin
-			print_float (Array.get a i);
+			print_float (a.(i));
 			print_string "; ";
 		end done;
-		print_float (Array.get a ((Array.length a) - 1));
+		print_float (a.((Array.length a) - 1));
 		print_string "|], ";
 	in print_array (fst e);
 		print_endline ("\"" ^ (snd e) ^ "\")")
