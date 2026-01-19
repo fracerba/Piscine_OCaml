@@ -72,11 +72,13 @@ let k_nn (lst : radar list) (k : int) (rdr : radar) : string =
 			-1
 		else
 			0
-	in let rec loop a b i =
-		if i >= k then
-			a
+	in let check_min a b =
+		if Array.length a < k then begin
+			Array.append a [|b|]
+		end
 		else begin
-			if eu_dist (fst a.(i)) (fst rdr) > eu_dist (fst b) (fst rdr) then begin (* non funziona *)
+			Array.sort cmp_radar a;
+			if eu_dist (fst a.(0)) (fst rdr) > eu_dist (fst b) (fst rdr) then begin
 				Array.set a 0 b;
 				Array.sort cmp_radar a;
 				print_radar_list (Array.to_list a);
@@ -84,16 +86,7 @@ let k_nn (lst : radar list) (k : int) (rdr : radar) : string =
 				a
 			end
 			else
-				loop a b (i + 1)
-		end
-	in let check_min a b =
-		if Array.length a < k then begin
-			let acc = Array.append a [|b|]
-			in Array.sort cmp_radar acc;
-			acc
-		end
-		else begin
-			loop a b 0
+				a
 		end
 	in let rec find_k_nn min lst =
 		if List.length lst > 0 && Float.is_nan (eu_dist (fst (List.hd lst)) (fst rdr)) then
