@@ -19,82 +19,111 @@ let eu_dist (a : float array) (b : float array) : float =
 	else 
 		nan
 
+let eu_dist_radar (a : radar) (b : radar) : float =
+	eu_dist (fst a) (fst b)
+		
 let print_radar (e : radar) =
 	let print_array (a : float array) =
 		print_string "([|";
-		for i = 0 to (Array.length a) - 2 do begin
+		for i = 0 to (Array.length a) - 1 do
 			print_float (a.(i));
-			print_string "; ";
-		end done;
-		print_float (a.((Array.length a) - 1));
+			if i < (Array.length a) - 1 then
+				print_string "; ";
+		done;
 		print_string "|], ";
 	in print_array (fst e);
 		print_endline ("\"" ^ (snd e) ^ "\")")
 
-let rec print_radar_list (l : radar list) =
-		match l with
-			| h :: t -> print_radar h;
-									print_radar_list t
-			| _ -> ()
+let print_radar_dist (a : radar) (b : radar) (r : radar) =
+	if eu_dist_radar a r <= eu_dist_radar b r then begin
+		print_float (eu_dist_radar b r);
+		print_newline ()
+	end
+	else begin
+		print_float (eu_dist_radar b r);
+		print_string " < ";
+		print_float (eu_dist_radar a r);
+		print_string  " --> ";
+		print_radar b;
+	end
 
-let rec find_nn (lst : radar list) : string =
+let rec print_radar_list (l : radar list) (rdr : radar) =
+	let print_radar_aux h =
+		print_string "\t";
+		print_float (eu_dist_radar h rdr);
+		print_string " - ";
+		print_radar h;
+	in match l with
+		| h :: t -> print_radar_aux h;
+								print_radar_list t rdr
+		| _ -> ()
+
+let rec find_nn (lst : radar list) (rdr : radar): string =
 	let rec extract_str l a =
 		match l with
+			| h :: t -> extract_str t ((snd h, eu_dist_radar h rdr) :: a)
 			| [] -> a
-			| h :: t -> extract_str t (snd h :: a)
-	in let rec update i acc =
+	in let rec update (s, f) acc =
 		match acc with
-			| h :: t when (fst h) = i -> (fst h, snd h + 1) :: t
-			| h :: t -> List.append [h] (update i t)
-			| [] -> (i, 1) :: acc
+			| (a, b, c) :: t when a = s -> (a, b + 1, c +. f) :: t
+			| h :: t -> List.append [h] (update (s, f) t)
+			| [] -> (s, 1, f) :: acc
 	in let rec loop l a =
 		match l with
 			| h :: t -> loop t (update h a)
 			| _ -> a
-	in let cmp_max h a =
-			if snd h > snd a then
-				h
-			else if snd h < snd a then
-				a
-			else
-				h (* da cambiare trovare un modo per scegliere il migliore *)
+	in let cmp_max (a1, b1, c1) (a2, b2, c2) =
+			if b1 > b2 then
+				(a1, b1, c1)
+			else if b2 > b1 then
+				(a2, b2, c2)
+			else begin
+				if c1 < c2 then
+					(a1, b1, c1)
+				else
+					(a2, b2, c2)
+			end
+	in let extract_max (a, b, c) =
+		a 
 	in let rec find_max l a =
 		match l with
 			| h :: t -> find_max t (cmp_max h a)
-			| _ -> fst a
-	in find_max (loop (extract_str lst []) []) ("", 0)
+			| _ -> extract_max a
+	in find_max (loop (extract_str lst []) []) ("", 0, 0.0)
 
 let k_nn (lst : radar list) (k : int) (rdr : radar) : string =
 	let cmp_radar a b =
-		if eu_dist (fst a) (fst rdr) > eu_dist (fst b) (fst rdr) then
-			1
-		else if eu_dist (fst a) (fst rdr) < eu_dist (fst b) (fst rdr) then
+		if eu_dist_radar a rdr > eu_dist_radar b rdr then
 			-1
+		else if eu_dist_radar a rdr < eu_dist_radar b rdr then
+			1
 		else
 			0
 	in let check_min a b =
+		if Array.length a > 0 then
+			Array.sort cmp_radar a;
 		if Array.length a < k then begin
 			Array.append a [|b|]
 		end
 		else begin
-			Array.sort cmp_radar a;
-			if eu_dist (fst a.(0)) (fst rdr) > eu_dist (fst b) (fst rdr) then begin
+			print_radar_dist a.(0) b rdr;
+			if eu_dist_radar a.(0) rdr > eu_dist_radar b rdr then begin
 				Array.set a 0 b;
-				Array.sort cmp_radar a;
-				print_radar_list (Array.to_list a);
-				print_newline ();
+				if Array.length a > 0 then
+					Array.sort cmp_radar a;
+				print_radar_list (Array.to_list a) rdr;
 				a
 			end
 			else
 				a
 		end
 	in let rec find_k_nn min lst =
-		if List.length lst > 0 && Float.is_nan (eu_dist (fst (List.hd lst)) (fst rdr)) then
+		if List.length lst > 0 && Float.is_nan (eu_dist_radar (List.hd lst) rdr) then
 			"Error: invalid data"
 		else
 			match lst with	
 				| h :: t -> find_k_nn (check_min min h) t
-				| _ -> find_nn (Array.to_list min)
+				| _ -> find_nn (Array.to_list min) rdr
 	in find_k_nn [||] lst
 
 let examples_of_file (file : string) : radar list =
@@ -126,8 +155,8 @@ let () =
 		in if List.length lst > 0 && len > 0 then begin 
 			print_endline (k_nn lst 1 (Array.make len 0.0, ""));
 			print_endline (k_nn lst 5 (Array.make len 1.0, ""));
-			(* print_endline (k_nn lst 4 (Array.make len 3.0, ""));
-			print_endline (k_nn lst 7 (Array.make len (-2.0), "")); *)
+			print_endline (k_nn lst 4 (Array.make len 3.0, ""));
+			print_endline (k_nn lst 7 (Array.make len (-2.0), ""));
 		end
 	end
 	else

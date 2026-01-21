@@ -19,26 +19,43 @@ let eu_dist (a : float array) (b : float array) : float =
 	else 
 		nan
 
+let eu_dist_radar (a : radar) (b : radar) : float =
+	eu_dist (fst a) (fst b)
+		
 let print_radar (e : radar) =
 	let print_array (a : float array) =
 		print_string "([|";
-		for i = 0 to (Array.length a) - 2 do begin
+		for i = 0 to (Array.length a) - 1 do
 			print_float (a.(i));
-			print_string "; ";
-		end done;
-		print_float (a.((Array.length a) - 1));
+			if i < (Array.length a) - 1 then
+				print_string "; ";
+		done;
 		print_string "|], ";
 	in print_array (fst e);
 		print_endline ("\"" ^ (snd e) ^ "\")")
 
+let print_radar_dist (a : radar) (b : radar) (r : radar) =
+	if eu_dist_radar a r <= eu_dist_radar b r then begin
+		print_float (eu_dist_radar b r);
+		print_newline ()
+	end
+	else begin
+		print_float (eu_dist_radar b r);
+		print_string " < ";
+		print_float (eu_dist_radar a r);
+		print_string  " --> ";
+		print_radar b;
+	end
+
 let one_nn (lst : radar list) (rdr : radar) : string =
 	let check_min a b r =
-		if eu_dist (fst a) (fst r) < eu_dist (fst b) (fst r) then
+		print_radar_dist a b r;
+		if eu_dist_radar a r <= eu_dist_radar b r then
 			a
 		else
 			b
 	in let rec find_nn min lst =
-		if List.length lst > 0 && Float.is_nan (eu_dist (fst (List.hd lst)) (fst rdr)) then
+		if List.length lst > 0 && Float.is_nan (eu_dist_radar (List.hd lst) rdr) then
 			"Error: invalid data"
 		else
 			match lst with	

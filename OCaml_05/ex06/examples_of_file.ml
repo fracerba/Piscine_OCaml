@@ -19,10 +19,10 @@ let examples_of_file (file : string) : (float array * string) list =
 let () =
 	let print_array (a : float array) =
 		print_string "([|";
-		for i = 0 to (Array.length a) - 2 do begin
+		for i = 0 to (Array.length a) - 2 do
 			print_float (a.(i));
 			print_string "; ";
-		end done;
+		done;
 		print_float (a.((Array.length a) - 1));
 		print_string "|], ";
 	in let print_example (e : (float array * string)) =
