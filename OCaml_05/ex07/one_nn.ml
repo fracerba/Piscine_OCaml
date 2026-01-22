@@ -49,7 +49,7 @@ let print_radar_dist (a : radar) (b : radar) (r : radar) =
 
 let one_nn (lst : radar list) (rdr : radar) : string =
 	let check_min a b r =
-		print_radar_dist a b r;
+		(* print_radar_dist a b r; *)
 		if eu_dist_radar a r <= eu_dist_radar b r then
 			a
 		else
@@ -90,10 +90,10 @@ let () =
 				Array.length (fst (List.hd lst))
 			with Failure _ -> 0
 		in if List.length lst > 0 && len > 0 then begin 
-			print_endline (one_nn lst (Array.make len 0.0, ""));
-			print_endline (one_nn lst (Array.make len 1.0, ""));
-			print_endline (one_nn lst (Array.make len 3.0, ""));
-			print_endline (one_nn lst (Array.make len (-2.0), ""));
+			print_endline (one_nn lst (Array.make len 0.1, ""));
+			print_endline (one_nn lst (Array.make len 0.3, ""));
+			print_endline (one_nn lst (Array.make len 0.8, ""));
+			print_endline (one_nn lst (Array.make len (-0.2), ""));
 		end
 	end
 	else

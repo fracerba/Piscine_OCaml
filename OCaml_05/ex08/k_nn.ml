@@ -58,6 +58,18 @@ let rec print_radar_list (l : radar list) (rdr : radar) =
 								print_radar_list t rdr
 		| _ -> ()
 
+let rec print_max l =
+	let print_aux (a, b, c) =
+		print_string ("(\"" ^ a ^ "\", ");
+		print_int b;
+		print_string ", ";
+		print_float c;
+		print_string ")\n";
+	in match l with
+		| h :: t -> print_aux h;
+								print_max t
+		| _ -> ()
+
 let rec find_nn (lst : radar list) (rdr : radar): string =
 	let rec extract_str l a =
 		match l with
@@ -66,30 +78,29 @@ let rec find_nn (lst : radar list) (rdr : radar): string =
 	in let rec update (s, f) acc =
 		match acc with
 			| (a, b, c) :: t when a = s -> (a, b + 1, c +. f) :: t
-			| h :: t -> List.append [h] (update (s, f) t)
+			| h :: t -> h :: (update (s, f) t)
 			| [] -> (s, 1, f) :: acc
 	in let rec loop l a =
 		match l with
 			| h :: t -> loop t (update h a)
 			| _ -> a
 	in let cmp_max (a1, b1, c1) (a2, b2, c2) =
-			if b1 > b2 then
+		if b1 > b2 then
+			(a1, b1, c1)
+		else if b2 > b1 then
+			(a2, b2, c2)
+		else begin
+			if c1 < c2 then
 				(a1, b1, c1)
-			else if b2 > b1 then
+			else
 				(a2, b2, c2)
-			else begin
-				if c1 < c2 then
-					(a1, b1, c1)
-				else
-					(a2, b2, c2)
-			end
-	in let extract_max (a, b, c) =
-		a 
-	in let rec find_max l a =
+		end 
+	in let rec find_max l (a, b, c) =
 		match l with
-			| h :: t -> find_max t (cmp_max h a)
-			| _ -> extract_max a
-	in find_max (loop (extract_str lst []) []) ("", 0, 0.0)
+			| h :: t -> find_max t (cmp_max h (a, b, c))
+			| _ -> a
+	in (* print_max (loop (extract_str lst []) []); *)
+		find_max (loop (extract_str lst []) []) ("", 0, 0.0)
 
 let k_nn (lst : radar list) (k : int) (rdr : radar) : string =
 	let cmp_radar a b =
@@ -100,18 +111,18 @@ let k_nn (lst : radar list) (k : int) (rdr : radar) : string =
 		else
 			0
 	in let check_min a b =
-		if Array.length a > 0 then
+		if Array.length a > 1 then
 			Array.sort cmp_radar a;
 		if Array.length a < k then begin
 			Array.append a [|b|]
 		end
 		else begin
-			print_radar_dist a.(0) b rdr;
+			(* print_radar_dist a.(0) b rdr; *)
 			if eu_dist_radar a.(0) rdr > eu_dist_radar b rdr then begin
 				Array.set a 0 b;
-				if Array.length a > 0 then
+				if Array.length a > 1 then
 					Array.sort cmp_radar a;
-				print_radar_list (Array.to_list a) rdr;
+				(* print_radar_list (Array.to_list a) rdr; *)
 				a
 			end
 			else
@@ -153,10 +164,11 @@ let () =
 				Array.length (fst (List.hd lst))
 			with Failure _ -> 0
 		in if List.length lst > 0 && len > 0 then begin 
-			print_endline (k_nn lst 1 (Array.make len 0.0, ""));
-			print_endline (k_nn lst 5 (Array.make len 1.0, ""));
-			print_endline (k_nn lst 4 (Array.make len 3.0, ""));
-			print_endline (k_nn lst 7 (Array.make len (-2.0), ""));
+			print_endline (k_nn lst 1 (Array.make len 0.1, ""));
+			print_endline (k_nn lst 5 (Array.make len 0.3, ""));
+			print_endline (k_nn lst 4 (Array.make len 0.8, ""));
+			print_endline (k_nn lst 7 (Array.make len (-0.2), ""));
+			print_endline (k_nn lst 20 (Array.make len (-0.9), ""));
 		end
 	end
 	else

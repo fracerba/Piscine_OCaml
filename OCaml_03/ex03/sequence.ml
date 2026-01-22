@@ -6,7 +6,7 @@ let sequence n =
 			| h :: t -> string_of_int n :: h :: loop_list t 1
 	in let rec loop l n =
 		if n < 0 then
-			["";]
+			[""]
 		else if n = 0 then
 			l
 		else
@@ -15,7 +15,7 @@ let sequence n =
 		match l with
 			| [] -> ""
 			| h :: t -> h ^ create_str t
-	in create_str (loop ["1";] (n - 1))
+	in create_str (loop ["1"] (n - 1))
 
 let () =
 	print_endline (sequence (-1));
