@@ -1,4 +1,17 @@
-module StringHashtbl = Hashtbl.Make(String)
+module StringHash =
+	struct
+		type t = string
+		let equal a b = a = b
+		let hash s = 
+			let rec loop i acc =
+				if i >= String.length s then
+					acc
+				else 
+					loop (i + 1) ((acc * 33) + int_of_char (String.get s i))
+			in loop 0 5381
+	end
+
+module StringHashtbl = Hashtbl.Make(StringHash)
 
 let () =
 	let ht = StringHashtbl.create 5 in
