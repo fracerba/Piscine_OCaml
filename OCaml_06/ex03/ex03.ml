@@ -33,7 +33,7 @@ module Make : MAKE =
 	struct
 		type t = int
 
-		let of_float (n : float) = int_of_float (n *. float_of_int (1 lsl B.bits))
+		let of_float (n : float) = int_of_float (floor (0.5 +. (n *. float_of_int (1 lsl B.bits))))
 
 		let of_int (n : int) = n lsl B.bits
 
