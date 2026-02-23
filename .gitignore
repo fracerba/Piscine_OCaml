@@ -2,3 +2,5 @@ OCaml_*/ex*/*.cm[iox]
 OCaml_*/ex*/*.o
 OCaml_*/ex*/a.out
 OCaml_*/ex*/test.txt
+OCaml_*/ex*/._d
+OCaml_*/ex*/ex??
