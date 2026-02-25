@@ -1,4 +1,4 @@
-SOURCES = army.ml dalek.ml doctor.ml galifrey.ml people.ml main.ml
+SOURCES = people.ml doctor.ml dalek.ml army.ml galifrey.ml main.ml
 RESULT  = ex04
 OCAMLOPT = ocamlopt
 
