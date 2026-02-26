@@ -63,7 +63,7 @@ module Make : MAKE =
 			else
 				n
 
-		let gth (n : t) (m : t)  = n > m
+		let gth (n : t) (m : t) = n > m
 
 		let lth (n : t) (m : t) = n < m
 

@@ -1,5 +1,5 @@
 SOURCES = people.ml main.ml
-RESULT  = ex00
+RESULT = ex00
 OCAMLOPT = ocamlopt
 
 all: $(RESULT)

@@ -1,5 +1,5 @@
 SOURCES = people.ml doctor.ml dalek.ml army.ml main.ml
-RESULT  = ex03
+RESULT = ex03
 OCAMLOPT = ocamlopt
 
 all: $(RESULT)

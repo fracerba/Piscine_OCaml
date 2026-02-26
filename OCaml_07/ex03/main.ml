@@ -1,51 +1,29 @@
 let () = 
-	let make_list n f = 
-		let rec aux acc n =
-			if n = 0 then 
-				acc
-			else 
-				aux (f () :: acc) (n - 1)
-		in aux [] n
-	in let army = new Army.army (make_list 5 (fun () -> new Dalek.dalek)) in
-  let people = new Army.army (make_list  3 (fun () -> new People.people "Clara Oswald")) in
-  let doctor = new Doctor.doctor "The Doctor" 2000 people in
-	print_endline people#to_string;
-	print_endline doctor#to_string;
-  print_endline dalek#to_string;
-	print_newline ();
-
-	people#talk;
-	doctor#talk;
-	print_newline ();
-
-  let doctor2 = doctor#travel_in_time 2012 12000 in
-  print_endline doctor2#to_string;
-	print_newline ();
-
-	let people2 = new People.people "Jo Patterson" in 
-	let people3 = new People.people "Leo Rugazzi" in 
-	print_endline people2#to_string;
-	print_endline people3#to_string;
-	people2#talk;
-	people3#talk;
-	print_newline ();
-
-  dalek#talk;
-	dalek#talk;
-	dalek#talk;
-	print_newline ();
-
-  let doctor3 = doctor2#take_damage 80 in
-  print_endline doctor3#to_string;
-	let doctor4 = doctor3#take_damage 30 in
-  print_endline doctor4#to_string;
-	print_newline ();
-
-  dalek#exterminate people2;
-	print_endline dalek#to_string;
-	dalek#exterminate people3;
-	print_endline dalek#to_string;
-	print_newline ();
-
-  doctor#use_sonic_screwdriver;
-  dalek#die;
+	let rec build_army (army : 'a Army.army) lst n =
+		if n <= 0 then
+			army
+		else begin
+			let new_soldier = List.nth lst n in
+			print_endline (new_soldier#to_string ^ " has joined the army!");
+			build_army (army#add new_soldier) lst (n - 1)
+		end
+	in let rec destroy_army_dalek (army : 'a Army.army) (species : string) =
+		match army#get_members with
+		| [] -> print_endline ("The " ^ species ^ " army is completely destroyed!")
+		| h :: t ->
+			h#die;
+			destroy_army_dalek army#delete species
+	in let peoples_army = new Army.army [] in
+	let doctors_army = new Army.army [] in
+	let daleks_army = new Army.army [] in
+	let peoples_name = ["Donna Noble"; "Amy Pond"; "Clara Oswald"; "Rory Williams"; "Rose Tyler"; ] in
+	let doctors_name = ["The Ninth Doctor"; "The Tenth Doctor"; "The Eleventh Doctor";] in
+	let peoples = List.init 5 (fun i -> new People.people (List.nth peoples_name i)) in
+	let doctors = List.init 3 (fun i -> new Doctor.doctor (List.nth doctors_name i) (1200 + i * 300) (List.nth peoples i)) in
+	let daleks = List.init 5 (fun _ -> new Dalek.dalek) in
+	let peoples_army = build_army peoples_army peoples 5 in
+	let doctors_army = build_army doctors_army doctors 3 in
+	let daleks_army = build_army daleks_army daleks 5 in
+	destroy_army_dalek daleks_army "Dalek";
+	(* destroy_army_dalek doctors_army "Doctor"; *)
+	destroy_army_dalek peoples_army "People";

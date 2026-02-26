@@ -43,7 +43,7 @@ let print_radar_dist (a : radar) (b : radar) (r : radar) =
 		print_float (eu_dist_radar b r);
 		print_string " < ";
 		print_float (eu_dist_radar a r);
-		print_string  " --> ";
+		print_string " --> ";
 		print_radar b;
 	end
 
