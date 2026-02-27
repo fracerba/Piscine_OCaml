@@ -1,5 +1,4 @@
 let () = 
-	Random.self_init();
 	let people = new People.people "Donna Noble" in
 	let doctor = new Doctor.doctor "The Doctor" 2000 people in
 	print_newline ();

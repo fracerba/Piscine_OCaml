@@ -6,7 +6,8 @@ class dalek =
 					String.make 1 (char_of_int ((Random.int 26) + 65))
 				else
 					String.make 1 (char_of_int ((Random.int 26) + 97))
-			in "Dalek" ^ rand_char () ^ rand_char () ^ rand_char ()
+			in Random.self_init();
+				"Dalek" ^ rand_char () ^ rand_char () ^ rand_char ()
 		val hp : int = 100
 		val mutable shield : bool = true
 

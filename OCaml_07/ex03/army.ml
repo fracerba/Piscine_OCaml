@@ -7,4 +7,4 @@ class ['a] army (army : 'a list) =
 				| [] -> self
 				| h :: t -> {< members = t >}
 		method get_members = members
-end
+	end
