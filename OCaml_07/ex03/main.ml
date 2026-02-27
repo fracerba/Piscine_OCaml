@@ -1,9 +1,9 @@
 let extract_name (s : string) =
-		String.sub s 6 (String.index s '|' - 7)
+	String.sub s 6 (String.index s '|' - 7)
 
 let list_iter f lst =
-		List.iter f (List.rev lst#get_members);
-		print_newline ()
+	List.iter f (List.rev lst#get_members);
+	print_newline ()
 
 let rec build_army army lst species =
 	match lst with
