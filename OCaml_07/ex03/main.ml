@@ -75,4 +75,5 @@ let () =
 
 	destroy_army daleks_army (fun d -> d#die) "Dalek";
 	destroy_army peoples_army2 (fun p -> p#die) "People";
-	destroy_army doctors_army2 (fun d -> d#travel_in_time (Random.int 10000) (Random.int 10000)) "Doctor";
+	let year = Random.int 100001 in
+	destroy_army doctors_army2 (fun d -> d#travel_in_time year ((Random.int 1300000) - 250000)) "Doctor";
