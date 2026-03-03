@@ -10,9 +10,9 @@ class galifrey =
 			List.iter f (List.rev lst#get_members);
 			print_newline ()
 		method private extract_name (s : string) =
-			String.sub s 6 (String.index s '|' - 7)
+			String.sub s (String.index s ':' + 2) (String.index s '|' - String.index s ':' - 3)
 		method private extract_shield (s : string) =
-			bool_of_string (String.sub s (String.rindex s '|' + 10) (String.length s - String.rindex s '|' - 1))
+			bool_of_string (String.sub s (String.rindex s ':' + 2) (String.length s - String.rindex s ':' - 2))
 		method private build_army army lst species =
 			match lst with
 				| [] -> print_newline ();

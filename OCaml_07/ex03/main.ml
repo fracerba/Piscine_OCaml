@@ -1,5 +1,5 @@
 let extract_name (s : string) =
-	String.sub s 6 (String.index s '|' - 7)
+	String.sub s (String.index s ':' + 2) (String.index s '|' - String.index s ':' - 3)
 
 let list_iter f lst =
 	List.iter f (List.rev lst#get_members);
