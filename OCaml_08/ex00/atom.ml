@@ -9,6 +9,13 @@ class virtual atom (nm : string) (sym : string) (nmb : int) =
 		method atomic_number = atomic_number
 		method to_string = name ^ " " ^ symbol ^ " " ^ string_of_int atomic_number
 		method equals (a : atom) = self#name = a#name && self#symbol = a#symbol && self#atomic_number = a#atomic_number
+		method to_list n =
+			let rec aux acc n =
+				if n <= 0 then 
+					acc
+				else
+					aux (self :: acc) (n - 1)
+			in aux [] n
 	end
 
 class hydrogen =
@@ -71,9 +78,9 @@ class magnesium =
 		inherit atom "Magnesium" "Mg" 12
 	end
 
-class aluminum =
+class aluminium =
 	object
-		inherit atom "Aluminum" "Al" 13
+		inherit atom "Aluminium" "Al" 13
 	end
 
 class silicon =
@@ -281,9 +288,9 @@ class xenon =
 		inherit atom "Xenon" "Xe" 54
 	end
 
-class cesium =
+class caesium =
 	object
-		inherit atom "Cesium" "Cs" 55
+		inherit atom "Caesium" "Cs" 55
 	end
 
 class barium =

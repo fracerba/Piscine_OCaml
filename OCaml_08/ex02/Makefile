@@ -1,4 +1,4 @@
-SOURCES = atom.ml molecules.ml alkanes.ml main.ml
+SOURCES = atom.ml molecule.ml alkane.ml main.ml
 RESULT  = ex02
 OCAMLMAKEFILE = ../OCamlMakefile
 

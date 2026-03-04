@@ -11,7 +11,7 @@ let () =
   let neon = new Atom.neon in
 	let sodium = new Atom.sodium in
 	let magnesium = new Atom.magnesium in
-	let aluminum = new Atom.aluminum in
+	let aluminium = new Atom.aluminium in
 	let silicon = new Atom.silicon in
 	let phosphorus = new Atom.phosphorus in
 	let sulfur = new Atom.sulfur in
@@ -53,7 +53,7 @@ let () =
 	let tellurium = new Atom.tellurium in
 	let iodine = new Atom.iodine in
 	let xenon = new Atom.xenon in
-	let cesium = new Atom.cesium in
+	let caesium = new Atom.caesium in
 	let barium = new Atom.barium in
 	let lanthanum = new Atom.lanthanum in
 	let cerium = new Atom.cerium in
@@ -120,17 +120,25 @@ let () =
 	
 	let periodic_table = [ hydrogen; helium; 
 		lithium; beryllium; boron; carbon; nitrogen; oxygen; fluorine; neon; 
-		sodium; magnesium; aluminum; silicon; phosphorus; sulfur; chlorine; argon; 
+		sodium; magnesium; aluminium; silicon; phosphorus; sulfur; chlorine; argon; 
 		potassium; calcium; scandium; titanium; vanadium; chromium; manganese; iron; cobalt; nickel; copper; zinc; gallium; germanium; arsenic; selenium; bromine; krypton; 
 		rubidium; strontium; yttrium; zirconium; niobium; molybdenum; technetium; ruthenium; rhodium; palladium; silver; cadmium; indium; tin; antimony; tellurium; iodine; xenon; 
-		cesium; barium; lanthanum; cerium; praseodymium; neodymium; promethium; samarium; europium; gadolinium; terbium; dysprosium; holmium; erbium; thulium; ytterbium; lutetium; hafnium; tantalum; tungsten; rhenium; osmium; iridium; platinum; gold; mercury; thallium; lead; bismuth; polonium; astatine; radon; 
+		caesium; barium; lanthanum; cerium; praseodymium; neodymium; promethium; samarium; europium; gadolinium; terbium; dysprosium; holmium; erbium; thulium; ytterbium; lutetium; hafnium; tantalum; tungsten; rhenium; osmium; iridium; platinum; gold; mercury; thallium; lead; bismuth; polonium; astatine; radon; 
 		francium; radium; actinium; thorium; protactinium; uranium; neptunium; plutonium; americium; curium; berkelium; californium; einsteinium; fermium; mendelevium; nobelium; lawrencium; rutherfordium; dubnium; seaborgium; bohrium; hassium; meitnerium; darmstadtium; roentgenium; copernicium; nihonium; flerovium; moscovium; livermorium; tennessine; oganesson 
 	] in
 
 	List.iter (fun a -> print_endline (a#name ^ " - " ^ a#symbol ^ " - " ^ string_of_int (a#atomic_number))) periodic_table;
 	print_newline ();
+
 	List.iter (fun a -> print_endline (a#to_string)) periodic_table;
 	print_newline ();
+
 	print_endline (string_of_bool (hydrogen#equals hydrogen));
 	print_endline (string_of_bool (hydrogen#equals (new Atom.hydrogen)));
 	print_endline (string_of_bool (hydrogen#equals helium));
+	print_newline ();
+
+	let n2 = nitrogen#to_list 2 in
+	let o3 = oxygen#to_list 3 in
+	List.iter (fun a -> print_endline (a#to_string)) n2;
+	List.iter (fun a -> print_endline (a#to_string)) o3;
