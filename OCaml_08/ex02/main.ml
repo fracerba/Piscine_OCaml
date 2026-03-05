@@ -22,6 +22,9 @@ let () =
 	List.iter (fun a -> print_endline (a#name ^ " - " ^ a#formula)) alkane_list;
 	print_newline ();
 
+	List.iter (fun a -> print_endline (a#name ^ " - " ^ (String.concat ", " (List.map (fun a -> a#symbol) a#atoms)))) alkane_list;
+	print_newline ();
+
 	List.iter (fun a -> print_endline a#to_string) alkane_list;
 	print_newline ();
 

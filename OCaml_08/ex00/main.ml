@@ -118,7 +118,7 @@ let () =
 	let tennessine = new Atom.tennessine in
 	let oganesson = new Atom.oganesson in
 	
-	let periodic_table = [ hydrogen; helium; 
+	let periodic_table = [hydrogen; helium; 
 		lithium; beryllium; boron; carbon; nitrogen; oxygen; fluorine; neon; 
 		sodium; magnesium; aluminium; silicon; phosphorus; sulfur; chlorine; argon; 
 		potassium; calcium; scandium; titanium; vanadium; chromium; manganese; iron; cobalt; nickel; copper; zinc; gallium; germanium; arsenic; selenium; bromine; krypton; 

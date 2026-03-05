@@ -16,10 +16,13 @@ let () =
 	let fructose = new Molecule.fructose in
 	let chloroform = new Molecule.chloroform in
 
-	let molecules = [ water; carbon_dioxide; ozone; hydrogen_peroxide; ammonia; methane; hydrofluoric_acid; hydrochloric_acid; 
+	let molecules = [water; carbon_dioxide; ozone; hydrogen_peroxide; ammonia; methane; hydrofluoric_acid; hydrochloric_acid; 
 		sodium_chloride; sulfuric_acid; chloric_acid; trinitrotoluene; benzene; glucose; fructose; chloroform] in
 
 	List.iter (fun m -> print_endline (m#name ^ " - " ^ m#formula)) molecules;
+	print_newline ();
+
+	List.iter (fun m -> print_endline (m#name ^ " - " ^ (String.concat ", " (List.map (fun a -> a#symbol) m#atoms)))) molecules;
 	print_newline ();
 
 	List.iter (fun m -> print_endline m#to_string) molecules;

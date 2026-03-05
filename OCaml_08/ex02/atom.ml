@@ -1,13 +1,9 @@
 class virtual atom (nm : string) (sym : string) (nmb : int) =
 	object (self)
-		val name : string = nm
-		val symbol : string = sym
-		val atomic_number : int = nmb
-
-		method name = name
-		method symbol = symbol
-		method atomic_number = atomic_number
-		method to_string = name ^ " " ^ symbol ^ " " ^ string_of_int atomic_number
+		method name : string = nm
+		method symbol : string = sym
+		method atomic_number : int = nmb
+		method to_string : string = nm ^ " " ^ sym ^ " " ^ string_of_int nmb
 		method equals (a : atom) = self#name = a#name && self#symbol = a#symbol && self#atomic_number = a#atomic_number
 		method to_list n =
 			let rec aux acc n =

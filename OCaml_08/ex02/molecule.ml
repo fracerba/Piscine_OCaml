@@ -1,12 +1,10 @@
 class virtual molecule (nm : string) (atoms : Atom.atom list) =
 	object (self)
-		val name : string = nm
-		val atoms : Atom.atom list = atoms
-		
-		method name : string = name
+		method name : string = nm
+		method atoms : Atom.atom list = List.sort (fun a1 a2 -> compare a1#symbol a2#symbol) atoms
 		method formula : string =
 			let count_atoms n =
-				if n > 1 then 
+				if n > 1 then
 					string_of_int n 
 				else 
 					""
@@ -39,7 +37,7 @@ class virtual molecule (nm : string) (atoms : Atom.atom list) =
 					| h :: t when (List.exists (fun (a, _) -> h#equals a) acc) -> loop t (List.map (update h) acc)
 					| h :: t -> loop t ((h, 1) :: acc)
 			in to_string_list (loop atoms []) []
-		method to_string : string = name ^ " " ^ self#formula
+		method to_string : string = nm ^ " " ^ self#formula
 		method equals (m : molecule) = self#name = m#name && self#formula = m#formula
 	end
 
