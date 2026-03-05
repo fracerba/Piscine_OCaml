@@ -130,7 +130,7 @@ let () =
 	List.iter (fun a -> print_endline (a#name ^ " - " ^ a#symbol ^ " - " ^ string_of_int (a#atomic_number))) periodic_table;
 	print_newline ();
 
-	List.iter (fun a -> print_endline (a#to_string)) periodic_table;
+	List.iter (fun a -> print_endline a#to_string) periodic_table;
 	print_newline ();
 
 	print_endline (string_of_bool (hydrogen#equals hydrogen));
@@ -140,5 +140,5 @@ let () =
 
 	let n2 = nitrogen#to_list 2 in
 	let o3 = oxygen#to_list 3 in
-	List.iter (fun a -> print_endline (a#to_string)) n2;
-	List.iter (fun a -> print_endline (a#to_string)) o3;
+	List.iter (fun a -> print_endline a#to_string) n2;
+	List.iter (fun a -> print_endline a#to_string) o3;

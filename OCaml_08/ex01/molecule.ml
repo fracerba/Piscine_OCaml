@@ -1,7 +1,7 @@
 class virtual molecule (nm : string) (atoms : Atom.atom list) =
 	object (self)
 		method name : string = nm
-		method atoms : Atom.atom list = List.sort (fun a1 a2 -> compare a1#symbol a2#symbol) atoms
+		method atoms : Atom.atom list = List.sort (fun a1 a2 -> compare a1#atomic_number a2#atomic_number) atoms
 		method formula : string =
 			let count_atoms n =
 				if n > 1 then
