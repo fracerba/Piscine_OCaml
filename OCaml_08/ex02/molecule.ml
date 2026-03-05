@@ -20,16 +20,14 @@ class virtual molecule (nm : string) (atoms : Atom.atom list) =
 						| [] -> [(a#symbol, count_atoms n)]
 				else
 					acc @ [(a#symbol, count_atoms n)]
-			in let rec to_string acc = 
-				match acc with
-					| [] -> ""
-					| (a, n) :: t -> a ^ n ^ to_string t
-			in let to_string_list l =
-				let rec aux acc l =
-					match l with
-						| [] -> to_string acc
-						| (a, n) :: t -> aux (hill_order (a, n) acc) t
-				in aux [] l
+			in let rec to_string lst acc = 
+				match lst with
+					| [] -> acc
+					| (a, n) :: t -> to_string t (acc ^ a ^ n)
+			in let rec to_string_list lst acc =
+				match lst with
+					| [] -> to_string acc ""
+					| (a, n) :: t -> to_string_list t (hill_order (a, n) acc)
 			in let update a (b, n) =
 				if a#equals b then
 					(b, n + 1)
@@ -40,7 +38,7 @@ class virtual molecule (nm : string) (atoms : Atom.atom list) =
 					| [] -> List.sort (fun (a1, _) (a2, _) -> compare a1#symbol a2#symbol) acc
 					| h :: t when (List.exists (fun (a, _) -> h#equals a) acc) -> loop t (List.map (update h) acc)
 					| h :: t -> loop t ((h, 1) :: acc)
-			in to_string_list (loop atoms [])
+			in to_string_list (loop atoms []) []
 		method to_string : string = name ^ " " ^ self#formula
 		method equals (m : molecule) = self#name = m#name && self#formula = m#formula
 	end
@@ -112,15 +110,15 @@ class benzene =
 
 class glucose =
 	object
-		inherit molecule "Glucose" ((new Atom.hydrogen#to_list 6) @ (new Atom.oxygen#to_list 6) @ (new Atom.carbon#to_list 6) @ (new Atom.hydrogen#to_list 6))
+		inherit molecule "Glucose" ((new Atom.hydrogen#to_list 12) @ (new Atom.oxygen#to_list 6) @ (new Atom.carbon#to_list 6))
 	end
 
 class fructose =
 	object
-		inherit molecule "Fructose" ((new Atom.carbon#to_list 6) @ (new Atom.hydrogen#to_list 12) @ (new Atom.oxygen#to_list 6))
+		inherit molecule "Fructose" ((new Atom.oxygen#to_list 6) @ (new Atom.carbon#to_list 6) @ (new Atom.hydrogen#to_list 12))
 	end
 
 class chloroform =
 	object
-		inherit molecule "Chloroform" ((new Atom.carbon#to_list 1) @ (new Atom.hydrogen#to_list 1) @ (new Atom.chlorine#to_list 3))
+		inherit molecule "Chloroform" ((new Atom.chlorine#to_list 3) @ (new Atom.carbon#to_list 1) @ (new Atom.hydrogen#to_list 1))
 	end
