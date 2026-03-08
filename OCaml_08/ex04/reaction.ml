@@ -21,7 +21,9 @@ class virtual reaction (start : (Molecule.molecule * int) list) (result : (Molec
 	end
 
 class alkane_combustion (alkanes : Alkane.alkane list) =
-	object
+	let filter_list = 
+		List.filter (fun a -> List.exists (fun alk -> alk#name = a#name) alkanes) 
+	in object
 		inherit reaction ()
 		method get_start : (Molecule.molecule * int) list = self#sort_start
 		method get_result : (Molecule.molecule * int) list = self#sort_result
