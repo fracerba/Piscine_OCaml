@@ -26,16 +26,11 @@ class virtual molecule (nm : string) (atoms : Atom.atom list) =
 				match lst with
 					| [] -> to_string acc ""
 					| (a, n) :: t -> to_string_list t (hill_order (a, n) acc)
-			in let update a (b, n) =
-				if a#equals b then
-					(b, n + 1)
-				else
-					(b, n)
 			in let rec loop lst acc =
-				match lst with
-					| [] -> List.sort (fun (a1, _) (a2, _) -> compare a1#symbol a2#symbol) acc
-					| h :: t when (List.exists (fun (a, _) -> h#equals a) acc) -> loop t (List.map (update h) acc)
-					| h :: t -> loop t ((h, 1) :: acc)
+				match lst, acc with
+					| [], _ -> List.sort (fun (a1, _) (a2, _) -> compare a1#symbol a2#symbol) acc
+					| h :: t, (a, n) :: c when h#equals a -> loop t ((a, n + 1) :: c)
+					| h :: t, _ -> loop t ((h, 1) :: acc)
 			in to_string_list (loop atoms []) []
 		method to_string : string = nm ^ " " ^ self#formula
 		method equals (m : molecule) = self#name = m#name && self#formula = m#formula
@@ -49,6 +44,11 @@ class water =
 class carbon_dioxide =
 	object
 		inherit molecule "Carbon Dioxide" ((new Atom.carbon#to_list 1) @ (new Atom.oxygen#to_list 2))
+	end
+
+class dioxygen =
+	object
+		inherit molecule "Dioxygen" (new Atom.oxygen#to_list 2)
 	end
 
 class ozone =

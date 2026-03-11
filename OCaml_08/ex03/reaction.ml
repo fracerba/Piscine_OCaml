@@ -5,17 +5,19 @@ class virtual reaction (start : (Molecule.molecule * int) list) (result : (Molec
 		method virtual balance : reaction
 		method virtual is_balanced : bool
 
-		method private sort_start : (Molecule.molecule * int) list = List.sort (fun (a, _) (b, _) -> compare a#name b#name) start
-		method private sort_result : (Molecule.molecule * int) list = List.sort (fun (a, _) (b, _) -> compare a#name b#name) result
+		method private sort_start : (Molecule.molecule * int) list = List.sort (fun (a, _) (b, _) -> compare a#formula b#formula) start
+		method private sort_result : (Molecule.molecule * int) list = List.sort (fun (a, _) (b, _) -> compare a#formula b#formula) result
 		method private check_balance : bool =
-			let rec get_atoms_molecule mol acc n =
+			let get_symbols mol =
+				List.map (fun a -> a#symbol) mol#atoms
+			in let rec get_atoms mol acc n =
 				if n <= 0 then
 					acc
 				else
-					get_atoms_molecule mol ((List.map (fun a -> a#symbol) mol#atoms) @ acc) (n - 1)
+					get_atoms mol (mol @ acc) (n - 1)
 			in let rec get_atoms_list lst acc =
 				match lst with
 					| [] -> List.sort compare acc
-					| (m, n) :: t -> get_atoms_list t ((get_atoms_molecule m [] n) @ acc)
-			in get_atoms_list self#get_start [] = get_atoms_list self#get_result []
+					| (m, n) :: t -> get_atoms_list t ((get_atoms (get_symbols m) [] n) @ acc)
+			in get_atoms_list self#sort_start [] = get_atoms_list self#sort_result []
 	end

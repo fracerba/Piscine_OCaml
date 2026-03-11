@@ -12,12 +12,13 @@ let () =
 
 	let water = new Molecule.water in
 	let carbon_dioxide = new Molecule.carbon_dioxide in
+	let dioxygen = new Molecule.dioxygen in
 	let ozone = new Molecule.ozone in
 	let hydrogen_peroxide = new Molecule.hydrogen_peroxide in
 	let ammonia = new Molecule.ammonia in
 	let methane = new Molecule.methane in
 
-	let molecules = [water; carbon_dioxide; ozone; hydrogen_peroxide; ammonia; methane] in
+	let molecules = [water; carbon_dioxide; dioxygen; ozone; hydrogen_peroxide; ammonia; methane] in
 
 	let methane2 = new Alkane.methane in
 	let ethane = new Alkane.ethane in

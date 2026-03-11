@@ -1,6 +1,7 @@
 let () = 
 	let water = new Molecule.water in
 	let carbon_dioxide = new Molecule.carbon_dioxide in
+	let dioxygen = new Molecule.dioxygen in
 	let ozone = new Molecule.ozone in
 	let hydrogen_peroxide = new Molecule.hydrogen_peroxide in
 	let ammonia = new Molecule.ammonia in
@@ -16,7 +17,7 @@ let () =
 	let fructose = new Molecule.fructose in
 	let chloroform = new Molecule.chloroform in
 
-	let molecules = [water; carbon_dioxide; ozone; hydrogen_peroxide; ammonia; methane; hydrofluoric_acid; hydrochloric_acid; 
+	let molecules = [water; carbon_dioxide; dioxygen; ozone; hydrogen_peroxide; ammonia; methane; hydrofluoric_acid; hydrochloric_acid; 
 		sodium_chloride; sulfuric_acid; chloric_acid; trinitrotoluene; benzene; glucose; fructose; chloroform] in
 
 	List.iter (fun m -> print_endline (m#name ^ " - " ^ m#formula)) molecules;
