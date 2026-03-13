@@ -34,6 +34,13 @@ class virtual molecule (nm : string) (atoms : Atom.atom list) =
 			in to_string_list (loop atoms []) []
 		method to_string : string = nm ^ " " ^ self#formula
 		method equals (m : molecule) = self#name = m#name && self#formula = m#formula
+		method to_list n =
+			let rec aux acc n =
+				if n <= 0 then 
+					acc
+				else
+					aux (self :: acc) (n - 1)
+			in aux [] n
 	end
 
 class water =

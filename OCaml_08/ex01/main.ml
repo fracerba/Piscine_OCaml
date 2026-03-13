@@ -32,3 +32,11 @@ let () =
 	print_endline (string_of_bool (water#equals carbon_dioxide));
 	print_endline (string_of_bool (glucose#equals fructose));
 	print_endline (string_of_bool (glucose#equals new Molecule.glucose));
+	print_newline ();
+
+	let water2 = water#to_list 2 in
+	let carbon_dioxide3 = carbon_dioxide#to_list 3 in
+	let ozone4 = ozone#to_list 4 in
+	List.iter (fun a -> print_endline a#to_string) water2;
+	List.iter (fun a -> print_endline a#to_string) carbon_dioxide3;
+	List.iter (fun a -> print_endline a#to_string) ozone4;

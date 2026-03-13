@@ -31,3 +31,11 @@ let () =
 	print_endline (string_of_bool (methane#equals new Alkane.methane));
 	print_endline (string_of_bool (methane#equals new Molecule.methane));
 	print_endline (string_of_bool (methane#equals ethane));
+	print_newline ();
+
+	let methane2 = methane#to_list 1 in
+	let ethane2 = ethane#to_list 2 in
+	let propane3 = propane#to_list 3 in
+	List.iter (fun a -> print_endline a#to_string) methane2;
+	List.iter (fun a -> print_endline a#to_string) ethane2;
+	List.iter (fun a -> print_endline a#to_string) propane3;

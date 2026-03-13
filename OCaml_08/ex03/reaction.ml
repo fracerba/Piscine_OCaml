@@ -20,4 +20,11 @@ class virtual reaction (start : (Molecule.molecule * int) list) (result : (Molec
 					| [] -> List.sort compare acc
 					| (m, n) :: t -> get_atoms_list t ((get_atoms (get_symbols m) [] n) @ acc)
 			in get_atoms_list self#sort_start [] = get_atoms_list self#sort_result []
+		method private reaction_equals (r : reaction) =
+			let rec list_cmp lst1 lst2 =
+				match lst1, lst2 with
+					| [], [] -> true
+					| (m1, n1) :: t1, (m2, n2) :: t2 when m1#equals m2 && n1 = n2 -> list_cmp t1 t2
+					| _ -> false
+			in list_cmp self#sort_start r#get_start && list_cmp self#sort_result r#get_result
 	end
