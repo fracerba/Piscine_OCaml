@@ -5,8 +5,9 @@ class virtual reaction (start : (Molecule.molecule * int) list) (result : (Molec
 		method virtual balance : reaction
 		method virtual is_balanced : bool
 
-		method private sort_start : (Molecule.molecule * int) list = List.sort (fun (a, _) (b, _) -> compare a#formula b#formula) start
-		method private sort_result : (Molecule.molecule * int) list = List.sort (fun (a, _) (b, _) -> compare a#formula b#formula) result
+		method private sort lst = List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) lst
+		method private sort_start : (Molecule.molecule * int) list = self#sort start
+		method private sort_result : (Molecule.molecule * int) list = self#sort result
 		method private check_balance : bool =
 			let get_symbols mol =
 				List.map (fun a -> a#symbol) mol#atoms
@@ -47,7 +48,7 @@ class alkane_combustion (alkanes : Alkane.alkane list) =
 			| [] -> n
 			| h :: t -> count_atoms t (n + List.fold_left (fun acc a -> count acc a atom) 0 h#atoms) atom
 	in let alkane_list : (Molecule.molecule * int) list =
-		parse alkanes []
+		parse (List.sort (fun a b -> compare (a#formula, a#name) (b#formula, b#name)) alkanes) []
 	in let carbon_nmb : int = 
 		count_atoms alkanes 0 (new Atom.carbon)
 	in let hydrogen_nmb : int = 
