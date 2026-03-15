@@ -31,7 +31,7 @@ class virtual molecule (nm : string) (atoms : Atom.atom list) =
 					| [], _ -> List.sort (fun (a1, _) (a2, _) -> compare a1#symbol a2#symbol) acc
 					| h :: t, (a, n) :: c when h#equals a -> loop t ((a, n + 1) :: c)
 					| h :: t, _ -> loop t ((h, 1) :: acc)
-			in to_string_list (loop atoms []) []
+			in to_string_list (loop self#atoms []) []
 		method to_string : string = nm ^ " " ^ self#formula
 		method equals (m : molecule) = self#name = m#name && self#formula = m#formula
 		method to_list n =
