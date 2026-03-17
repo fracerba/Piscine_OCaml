@@ -5,9 +5,10 @@ class virtual reaction (start : (Molecule.molecule * int) list) (result : (Molec
 		method virtual balance : reaction
 		method virtual is_balanced : bool
 
-		let sort lst = List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) lst in
-		method private sort_start : (Molecule.molecule * int) list = sort start
-		method private sort_result : (Molecule.molecule * int) list = sort result
+		method private sort_start : (Molecule.molecule * int) list = 
+			List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) start
+		method private sort_result : (Molecule.molecule * int) list =
+			List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) result
 		method private check_balance : bool =
 			let get_symbols mol =
 				List.map (fun a -> a#symbol) mol#atoms
@@ -104,4 +105,24 @@ class alkane_combustion (alkanes : Alkane.alkane list) =
 				(new alkane_combustion (new_alkanes 1) :> reaction)
 		method is_balanced : bool = self#check_balance
 		method get_incomplete_results : (int * (Molecule.molecule * int) list) list =
+			let max_oxygen = 
+				if self#is_balanced then
+					carbon_nmb + hydrogen_nmb / 4 - 1
+				else
+					carbon_nmb + hydrogen_nmb / 4
+			in let min_oxygen =
+				if hydrogen_nmb mod 4 = 0 then
+					hydrogen_nmb / 4
+				else
+					hydrogen_nmb / 4 + 1
+			in let rec get_incomplete_result n acc =
+				
+			in let rec get_incomplete_results_list acc n =
+				if n > max_oxygen then
+					List.sort (fun (a, _) (b, _) -> compare b a) acc
+				else
+					get_incomplete_results_list (( n [new Molecule.water, hydrogen_nmb / 2]) :: acc) (n + 1)
+			in get_incomplete_results_list [] min_oxygen
+		method get_starting_alkanes =
+			alkane_list
 	end

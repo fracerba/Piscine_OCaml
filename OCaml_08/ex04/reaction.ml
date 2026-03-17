@@ -5,9 +5,10 @@ class virtual reaction (start : (Molecule.molecule * int) list) (result : (Molec
 		method virtual balance : reaction
 		method virtual is_balanced : bool
 
-		let sort lst = List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) lst in
-		method private sort_start : (Molecule.molecule * int) list = sort start
-		method private sort_result : (Molecule.molecule * int) list = sort result
+		method private sort_start : (Molecule.molecule * int) list = 
+			List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) start
+		method private sort_result : (Molecule.molecule * int) list =
+			List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) result
 		method private check_balance : bool =
 			let get_symbols mol =
 				List.map (fun a -> a#symbol) mol#atoms
