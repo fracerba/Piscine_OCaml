@@ -127,3 +127,13 @@ class chloroform =
 	object
 		inherit molecule "Chloroform" ((new Atom.chlorine#to_list 3) @ (new Atom.carbon#to_list 1) @ (new Atom.hydrogen#to_list 1))
 	end
+
+class carbon_monoxide =
+	object
+		inherit molecule "Carbon Monoxide" ((new Atom.carbon#to_list 1) @ (new Atom.oxygen#to_list 1))
+	end
+
+class carbon =
+	object
+		inherit molecule "Carbon" (new Atom.carbon#to_list 1)
+	end

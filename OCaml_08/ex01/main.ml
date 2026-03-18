@@ -16,9 +16,11 @@ let () =
 	let glucose = new Molecule.glucose in
 	let fructose = new Molecule.fructose in
 	let chloroform = new Molecule.chloroform in
+	let carbon_monoxide = new Molecule.carbon_monoxide in
+	let carbon = new Molecule.carbon in
 
 	let molecules = [water; carbon_dioxide; dioxygen; ozone; hydrogen_peroxide; ammonia; methane; hydrofluoric_acid; hydrochloric_acid; 
-		sodium_chloride; sulfuric_acid; chloric_acid; trinitrotoluene; benzene; glucose; fructose; chloroform] in
+		sodium_chloride; sulfuric_acid; chloric_acid; trinitrotoluene; benzene; glucose; fructose; chloroform; carbon_monoxide; carbon] in
 
 	List.iter (fun m -> print_endline (m#name ^ " - " ^ m#formula)) molecules;
 	print_newline ();
