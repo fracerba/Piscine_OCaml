@@ -115,14 +115,21 @@ class alkane_combustion (alkanes : Alkane.alkane list) =
 					hydrogen_nmb / 4
 				else
 					hydrogen_nmb / 4 + 1
-			in let rec get_incomplete_result n acc =
-				
+			in let get_oxygen n =
+				2 * n - hydrogen_nmb / 2
+			in let incomplete_result_list n = 
+				List.filter (fun (_, n) -> n > 0) [
+					(new Molecule.carbon_dioxide, (get_oxygen n) / 2); 
+					(new Molecule.carbon_monoxide, (get_oxygen n) mod 2); 
+					(new Molecule.carbon, carbon_nmb - (get_oxygen n) / 2 - (get_oxygen n) mod 2); 
+					(new Molecule.water, hydrogen_nmb / 2)
+				]
+			in let get_incomplete_result n =
+				(n, List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) (incomplete_result_list n))
 			in let rec get_incomplete_results_list acc n =
-				if n > max_oxygen then
-					List.sort (fun (a, _) (b, _) -> compare b a) acc
+				if n < min_oxygen then
+					List.sort (fun (a, _) (b, _) -> compare a b) acc
 				else
-					get_incomplete_results_list (( n [new Molecule.water, hydrogen_nmb / 2]) :: acc) (n + 1)
-			in get_incomplete_results_list [] min_oxygen
-		method get_starting_alkanes =
-			alkane_list
+					get_incomplete_results_list ((get_incomplete_result n) :: acc) (n - 1)
+			in get_incomplete_results_list [] max_oxygen
 	end
