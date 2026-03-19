@@ -48,8 +48,10 @@ class alkane_combustion (alkanes : Alkane.alkane list) =
 		match lst with
 			| [] -> n
 			| h :: t -> count_atoms t (n + List.fold_left (fun acc a -> count acc a atom) 0 h#atoms) atom
+	in let compare_molecules a b =
+		compare (a#formula, a#name) (b#formula, b#name) 
 	in let alkane_list : (Molecule.molecule * int) list =
-		parse (List.sort (fun a b -> compare (a#formula, a#name) (b#formula, b#name)) alkanes) []
+		parse (List.sort compare_molecules alkanes) []
 	in let carbon_nmb : int = 
 		count_atoms alkanes 0 (new Atom.carbon)
 	in let hydrogen_nmb : int = 
@@ -117,19 +119,27 @@ class alkane_combustion (alkanes : Alkane.alkane list) =
 					hydrogen_nmb / 4 + 1
 			in let get_oxygen n =
 				2 * n - hydrogen_nmb / 2
-			in let incomplete_result_list n = 
-				List.filter (fun (_, n) -> n > 0) [
-					(new Molecule.carbon_dioxide, (get_oxygen n) / 2); 
-					(new Molecule.carbon_monoxide, (get_oxygen n) mod 2); 
-					(new Molecule.carbon, carbon_nmb - (get_oxygen n) / 2 - (get_oxygen n) mod 2); 
-					(new Molecule.water, hydrogen_nmb / 2)
-				]
-			in let get_incomplete_result n =
-				(n, List.sort (fun (a, _) (b, _) -> compare (a#formula, a#name) (b#formula, b#name)) (incomplete_result_list n))
+			in let incomplete_result_list a b c acc = 
+				if a <> 2 * b + c || b + c > carbon_nmb then
+					acc
+				else
+					List.filter (fun (_, n) -> n > 0) [
+						(new Molecule.carbon_dioxide, b);
+						(new Molecule.carbon_monoxide, c);
+						(new Molecule.carbon, carbon_nmb - b - c);
+						(new Molecule.water, hydrogen_nmb / 2)
+					] :: acc
+			in let rec loop a b c acc =
+				if b = 0 then
+					incomplete_result_list a b c acc
+				else
+					loop a (b - 1) (c + 2) (incomplete_result_list a b c acc)
+			in let get_incomplete_result n m =
+				List.map (fun a -> (m, List.sort (fun (a, _) (b, _) -> compare_molecules a b) a)) (loop n (n / 2) (n mod 2) [])
 			in let rec get_incomplete_results_list acc n =
-				if n < min_oxygen then
+				if n > max_oxygen then
 					List.sort (fun (a, _) (b, _) -> compare a b) acc
 				else
-					get_incomplete_results_list ((get_incomplete_result n) :: acc) (n - 1)
-			in get_incomplete_results_list [] max_oxygen
+					get_incomplete_results_list ((get_incomplete_result (get_oxygen n) n) @ acc) (n + 1)
+			in get_incomplete_results_list [] min_oxygen
 	end

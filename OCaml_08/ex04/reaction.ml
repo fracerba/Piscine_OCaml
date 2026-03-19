@@ -48,8 +48,10 @@ class alkane_combustion (alkanes : Alkane.alkane list) =
 		match lst with
 			| [] -> n
 			| h :: t -> count_atoms t (n + List.fold_left (fun acc a -> count acc a atom) 0 h#atoms) atom
+	in let compare_molecules a b =
+		compare (a#formula, a#name) (b#formula, b#name) 
 	in let alkane_list : (Molecule.molecule * int) list =
-		parse (List.sort (fun a b -> compare (a#formula, a#name) (b#formula, b#name)) alkanes) []
+		parse (List.sort compare_molecules alkanes) []
 	in let carbon_nmb : int = 
 		count_atoms alkanes 0 (new Atom.carbon)
 	in let hydrogen_nmb : int = 

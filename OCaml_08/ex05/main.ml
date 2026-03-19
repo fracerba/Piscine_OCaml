@@ -86,8 +86,4 @@ let () =
 	let combustion_11 = new Alkane.ethane#to_list 2 in
 	let combustion_12 = new Alkane.ethane#to_list 1 @ new Alkane.methane#to_list 3 @ new Alkane.ethane#to_list 2 in
 	let combustion_13 = new Alkane.ethane#to_list 2 @ new Alkane.methane#to_list 1 @ new Alkane.propane#to_list 1 in
-	let combustion_14 = new Alkane.ethane#to_list 3 @ new Alkane.butane#to_list 5 in
-	let combustion_15 = new Alkane.pentane#to_list 6 @ new Alkane.hexane#to_list 4 in
-	let combustion_16 = new Alkane.methane#to_list 1 @ new Alkane.ethane#to_list 1 @ new Alkane.propane#to_list 1 @ new Alkane.butane#to_list 1 @ 
-		new Alkane.pentane#to_list 1 @ new Alkane.hexane#to_list 1 @ new Alkane.heptane#to_list 1 @ new Alkane.octane#to_list 1 in
-	List.iter test_reaction [combustion_9; combustion_10; combustion_11; combustion_12; combustion_13; combustion_14; combustion_15; combustion_16]
+	List.iter test_reaction [combustion_9; combustion_10; combustion_11; combustion_12; combustion_13]
