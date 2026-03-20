@@ -133,7 +133,7 @@ class carbon_monoxide =
 		inherit molecule "Carbon Monoxide" ((new Atom.carbon#to_list 1) @ (new Atom.oxygen#to_list 1))
 	end
 
-class carbon =
+class soot =
 	object
-		inherit molecule "Carbon" (new Atom.carbon#to_list 1)
+		inherit molecule "Soot" (new Atom.carbon#to_list 1)
 	end
