@@ -57,26 +57,26 @@ let () =
 				print_newline ()
 			with Reaction.Unbalanced err -> prerr_endline err;
 		end
-	in let combustion_1 = new Alkane.methane#to_list 1 in
-	let combustion_2 = new Alkane.ethane#to_list 1 in
-	let combustion_3 = new Alkane.propane#to_list 1 in
-	let combustion_4 = new Alkane.butane#to_list 1 in
-	let combustion_5 = new Alkane.pentane#to_list 1 in
-	let combustion_6 = new Alkane.hexane#to_list 1 in 
-	let combustion_7 = new Alkane.heptane#to_list 1 in
-	let combustion_8 = new Alkane.octane#to_list 1 in
+	in let combustion_1 = new Alkane.methane#to_list 1
+	and combustion_2 = new Alkane.ethane#to_list 1
+	and combustion_3 = new Alkane.propane#to_list 1
+	and combustion_4 = new Alkane.butane#to_list 1
+	and combustion_5 = new Alkane.pentane#to_list 1
+	and combustion_6 = new Alkane.hexane#to_list 1 
+	and combustion_7 = new Alkane.heptane#to_list 1
+	and combustion_8 = new Alkane.octane#to_list 1 in
 
 	let combustions = [combustion_1; combustion_2; combustion_3; combustion_4; combustion_5; combustion_6; combustion_7; combustion_8] in
 	List.iter test_reaction combustions;
 	print_endline "\n";
 
-	let combustion_9 = new Alkane.methane#to_list 2 in
-	let combustion_10 = new Alkane.methane#to_list 3 in
-	let combustion_11 = new Alkane.ethane#to_list 2 in
-	let combustion_12 = new Alkane.ethane#to_list 1 @ new Alkane.methane#to_list 3 @ new Alkane.ethane#to_list 2 in
-	let combustion_13 = new Alkane.ethane#to_list 2 @ new Alkane.methane#to_list 1 @ new Alkane.propane#to_list 1 in
-	let combustion_14 = new Alkane.ethane#to_list 3 @ new Alkane.butane#to_list 5 in
-	let combustion_15 = new Alkane.pentane#to_list 6 @ new Alkane.hexane#to_list 4 in
-	let combustion_16 = new Alkane.methane#to_list 1 @ new Alkane.ethane#to_list 1 @ new Alkane.propane#to_list 1 @ new Alkane.butane#to_list 1 @ 
+	let combustion_9 = new Alkane.methane#to_list 2
+	and combustion_10 = new Alkane.methane#to_list 3
+	and combustion_11 = new Alkane.ethane#to_list 2
+	and combustion_12 = new Alkane.ethane#to_list 1 @ new Alkane.methane#to_list 3 @ new Alkane.ethane#to_list 2
+	and combustion_13 = new Alkane.ethane#to_list 2 @ new Alkane.methane#to_list 1 @ new Alkane.propane#to_list 1
+	and combustion_14 = new Alkane.ethane#to_list 3 @ new Alkane.butane#to_list 5
+	and combustion_15 = new Alkane.pentane#to_list 6 @ new Alkane.hexane#to_list 4
+	and combustion_16 = new Alkane.methane#to_list 1 @ new Alkane.ethane#to_list 1 @ new Alkane.propane#to_list 1 @ new Alkane.butane#to_list 1 @ 
 		new Alkane.pentane#to_list 1 @ new Alkane.hexane#to_list 1 @ new Alkane.heptane#to_list 1 @ new Alkane.octane#to_list 1 in
 	List.iter test_reaction [combustion_9; combustion_10; combustion_11; combustion_12; combustion_13; combustion_14; combustion_15; combustion_16]

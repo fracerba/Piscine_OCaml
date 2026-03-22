@@ -1,31 +1,31 @@
 let () =
-	let hydrogen = new Atom.hydrogen in
-	let helium = new Atom.helium in
-	let lithium = new Atom.lithium in
-	let beryllium = new Atom.beryllium in
-	let boron = new Atom.boron in
-	let carbon = new Atom.carbon in
-	let nitrogen = new Atom.nitrogen in
-	let oxygen = new Atom.oxygen in
+	let hydrogen = new Atom.hydrogen
+	and helium = new Atom.helium
+	and lithium = new Atom.lithium
+	and beryllium = new Atom.beryllium
+	and boron = new Atom.boron
+	and carbon = new Atom.carbon
+	and nitrogen = new Atom.nitrogen
+	and oxygen = new Atom.oxygen in
 
 	let atoms = [hydrogen; helium; lithium; beryllium; boron; carbon; nitrogen; oxygen] in
 
-	let water = new Molecule.water in
-	let carbon_dioxide = new Molecule.carbon_dioxide in
-	let dioxygen = new Molecule.dioxygen in
-	let ozone = new Molecule.ozone in
-	let hydrogen_peroxide = new Molecule.hydrogen_peroxide in
-	let ammonia = new Molecule.ammonia in
-	let methane = new Molecule.methane in
+	let water = new Molecule.water
+	and carbon_dioxide = new Molecule.carbon_dioxide
+	and dioxygen = new Molecule.dioxygen
+	and ozone = new Molecule.ozone
+	and hydrogen_peroxide = new Molecule.hydrogen_peroxide
+	and ammonia = new Molecule.ammonia
+	and methane = new Molecule.methane in
 
 	let molecules = [water; carbon_dioxide; dioxygen; ozone; hydrogen_peroxide; ammonia; methane] in
 
-	let methane2 = new Alkane.methane in
-	let ethane = new Alkane.ethane in
-	let propane = new Alkane.propane in
-	let butane = new Alkane.butane in
-	let pentane = new Alkane.pentane in
-	let hexane = new Alkane.hexane in
+	let methane2 = new Alkane.methane
+	and ethane = new Alkane.ethane
+	and propane = new Alkane.propane
+	and butane = new Alkane.butane
+	and pentane = new Alkane.pentane
+	and hexane = new Alkane.hexane in
 
 	let alkane_list = [methane2; ethane; propane; butane; pentane; hexane] in
 

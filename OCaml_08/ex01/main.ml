@@ -1,23 +1,23 @@
 let () = 
-	let water = new Molecule.water in
-	let carbon_dioxide = new Molecule.carbon_dioxide in
-	let dioxygen = new Molecule.dioxygen in
-	let ozone = new Molecule.ozone in
-	let hydrogen_peroxide = new Molecule.hydrogen_peroxide in
-	let ammonia = new Molecule.ammonia in
-	let methane = new Molecule.methane in
-	let hydrofluoric_acid = new Molecule.hydrofluoric_acid in
-	let hydrochloric_acid = new Molecule.hydrochloric_acid in
-	let sodium_chloride = new Molecule.sodium_chloride in
-	let sulfuric_acid = new Molecule.sulfuric_acid in
-	let chloric_acid = new Molecule.chloric_acid in
-	let trinitrotoluene = new Molecule.trinitrotoluene in
-	let benzene = new Molecule.benzene in
-	let glucose = new Molecule.glucose in
-	let fructose = new Molecule.fructose in
-	let chloroform = new Molecule.chloroform in
-	let carbon_monoxide = new Molecule.carbon_monoxide in
-	let soot = new Molecule.soot in
+	let water = new Molecule.water
+	and carbon_dioxide = new Molecule.carbon_dioxide
+	and dioxygen = new Molecule.dioxygen
+	and ozone = new Molecule.ozone
+	and hydrogen_peroxide = new Molecule.hydrogen_peroxide
+	and ammonia = new Molecule.ammonia
+	and methane = new Molecule.methane
+	and hydrofluoric_acid = new Molecule.hydrofluoric_acid
+	and hydrochloric_acid = new Molecule.hydrochloric_acid
+	and sodium_chloride = new Molecule.sodium_chloride
+	and sulfuric_acid = new Molecule.sulfuric_acid
+	and chloric_acid = new Molecule.chloric_acid
+	and trinitrotoluene = new Molecule.trinitrotoluene
+	and benzene = new Molecule.benzene
+	and glucose = new Molecule.glucose
+	and fructose = new Molecule.fructose
+	and chloroform = new Molecule.chloroform
+	and carbon_monoxide = new Molecule.carbon_monoxide
+	and soot = new Molecule.soot in
 
 	let molecules = [water; carbon_dioxide; dioxygen; ozone; hydrogen_peroxide; ammonia; methane; hydrofluoric_acid; hydrochloric_acid; 
 		sodium_chloride; sulfuric_acid; chloric_acid; trinitrotoluene; benzene; glucose; fructose; chloroform; carbon_monoxide; soot] in
@@ -36,9 +36,9 @@ let () =
 	print_endline (string_of_bool (glucose#equals new Molecule.glucose));
 	print_newline ();
 
-	let water2 = water#to_list 2 in
-	let carbon_dioxide3 = carbon_dioxide#to_list 3 in
-	let ozone4 = ozone#to_list 4 in
+	let water2 = water#to_list 2
+	and carbon_dioxide3 = carbon_dioxide#to_list 3
+	and ozone4 = ozone#to_list 4 in
 	List.iter (fun a -> print_endline a#to_string) water2;
 	List.iter (fun a -> print_endline a#to_string) carbon_dioxide3;
 	List.iter (fun a -> print_endline a#to_string) ozone4;
