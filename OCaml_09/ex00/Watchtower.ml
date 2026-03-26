@@ -5,18 +5,20 @@ struct
 	let zero : hour = 12
 
 	let add (i : hour) (j : hour) : hour =
-		if (i + j) mod zero = 0 then
+		let result = (i + j) mod zero in
+		if result = 0 then
 			zero
 		else
-			(i + j) mod zero
+			result
 
 	let sub (i : hour) (j : hour) : hour =
-		if (i - j) mod zero >= 0 then begin
-			if (i - j) mod zero = 0 then
+		let result = (i - j) mod zero in
+		if result >= 0 then begin
+			if result = 0 then
 				zero
 			else
-				(i - j) mod zero
+				result
 		end
 		else
-			(i - j) mod zero + zero
+			result + zero
 end

@@ -7,7 +7,7 @@ class doctor (nm : string) (old : int) (sdk : People.people) =
 		
 		method to_string = "name: " ^ name ^ " | age: " ^ string_of_int age ^ " | hp: " ^ string_of_int hp ^ " | sidekick: [" ^ sdk#to_string ^ "]"
 		method talk = print_endline ("Hi! I'm the Doctor!")
-		initializer print_endline (name ^ " exited the TARDIS and is ready to explore the world!")
+		initializer print_endline ("Doctor " ^ name ^ " exited the TARDIS and is ready to explore the world!")
 		method travel_in_time (start : int) (arrival : int) =
 			print_endline ("Traveling in time from " ^ string_of_int start ^ " to " ^ string_of_int arrival);
 			print_endline ("                 _.--._");
