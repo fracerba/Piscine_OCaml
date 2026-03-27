@@ -1,11 +1,10 @@
-let print_proj (a : App.App.project) : unit =
-	let (n, s, g) = a in
-	print_string ("Name: " ^ n ^ ", ");
-	print_string ("Status: " ^ s ^ ", ");
-	print_endline ("Grade: " ^ string_of_int g)
-
 let () =
-	let proj1 : App.App.project = ("Astro Bot", "succeed" , 94)
+	let print_proj (a : App.App.project) : unit =
+		let (n, s, g) = a in
+		print_string ("Name: \"" ^ n ^ "\", ");
+		print_string ("Status: " ^ s ^ ", ");
+		print_endline ("Grade: " ^ string_of_int g)
+	in let proj1 : App.App.project = ("Astro Bot", "succeed" , 94)
 	and proj2 : App.App.project = ("Bloodborne", "succeed" , 92)
 	and proj3 : App.App.project = ("Concord", "failed", 62)
 	and proj4 : App.App.project = App.App.zero in
