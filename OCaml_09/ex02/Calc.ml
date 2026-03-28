@@ -63,8 +63,8 @@ module Calc : CALC =
 				if n < M.zero1 then
 					M.zero1
 				else if n = M.zero1 || n < M.zero2 then
-					M.mul acc M.zero2
+					acc
 				else
-					loop (M.sub n M.zero2) (M.mul acc a)
+					loop (M.sub n M.zero2) (M.mul acc n)
 			in loop a M.zero2
 	end

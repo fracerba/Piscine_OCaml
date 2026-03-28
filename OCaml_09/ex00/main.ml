@@ -1,16 +1,14 @@
 let () =
-	let print_hour_add (a : Watchtower.Watchtower.hour) (b : Watchtower.Watchtower.hour) : unit =
+	let print_hour a b sign r : unit =
 		print_string (string_of_int a);
-		print_string " + ";
+		print_string sign;
 		print_string (string_of_int b);
 		print_string " = ";
-		print_endline (string_of_int (Watchtower.Watchtower.add a b));
+		print_endline (string_of_int r);
+	in let print_hour_add (a : Watchtower.Watchtower.hour) (b : Watchtower.Watchtower.hour) : unit =
+		print_hour a b " + " (Watchtower.Watchtower.add a b);
 	and print_hour_sub (a : Watchtower.Watchtower.hour) (b : Watchtower.Watchtower.hour) : unit =
-		print_string (string_of_int a);
-		print_string " - ";
-		print_string (string_of_int b);
-		print_string " = ";
-		print_endline (string_of_int (Watchtower.Watchtower.sub a b));
+		print_hour a b " - " (Watchtower.Watchtower.sub a b);
 	in let hour1 : Watchtower.Watchtower.hour = 10
 	and hour2 : Watchtower.Watchtower.hour = 4
 	and hour3 : Watchtower.Watchtower.hour = Watchtower.Watchtower.zero 
