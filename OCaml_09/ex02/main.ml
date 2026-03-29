@@ -31,15 +31,16 @@ let () =
 		let b = 
 			Option.value ~default:0 b_opt 
 		in let r =
-			match sign with
-				| "+" -> Some (Calc_int.add a b)
-				| "-" -> Some (Calc_int.sub a b)
-				| "*" -> Some (Calc_int.mul a b)
-				| "/" when b <> 0 -> Some (Calc_int.div a b)
-				| "/" -> None
-				| "^" -> Some (Calc_int.power a b)
-				| "!" -> Some (Calc_int.fact a)
-				| _ -> None
+			try
+				match sign with
+					| "+" -> Some (Calc_int.add a b)
+					| "-" -> Some (Calc_int.sub a b)
+					| "*" -> Some (Calc_int.mul a b)
+					| "/" -> Some (Calc_int.div a b)
+					| "^" -> Some (Calc_int.power a b)
+					| "!" -> Some (Calc_int.fact a)
+					| _ -> None
+			with Division_by_zero -> None
 		in print_calc a b sign r string_of_int
 	and print_calc_float a b_opt sign =
 		let b =

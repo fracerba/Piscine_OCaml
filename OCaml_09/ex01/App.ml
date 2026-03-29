@@ -1,4 +1,4 @@
-module type App =
+module type APP =
 sig
 	type project = string * string * int
 	val zero : project
@@ -7,8 +7,7 @@ sig
 	val success : project -> project
 end
 
-
-module App : App =
+module App : APP =
 struct
 	type project = string * string * int
 
@@ -21,8 +20,10 @@ struct
 			else
 				"failed"
 		in (n1 ^ n2, get_status g1 g2, (g1 + g2) / 2)
+
 	let fail ((n1, _, _) : project) : project =
 		(n1, "failed", 0)
+
 	let success ((n1, _, _) : project) : project =
 		(n1, "succeed", 80)
 end

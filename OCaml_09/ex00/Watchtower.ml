@@ -1,4 +1,4 @@
-module type Watchtower =
+module type WATCHTOWER =
 sig
 	type hour = int
 	val zero : hour
@@ -6,7 +6,7 @@ sig
 	val sub : hour -> hour -> hour
 end
 
-module Watchtower : Watchtower =
+module Watchtower : WATCHTOWER =
 struct
 	type hour = int
 
@@ -21,12 +21,10 @@ struct
 
 	let sub (i : hour) (j : hour) : hour =
 		let result = (i - j) mod zero in
-		if result >= 0 then begin
-			if result = 0 then
-				zero
-			else
-				result
-		end
+		if result = 0 then
+			zero
+		else if result > 0 then
+			result
 		else
 			result + zero
 end
