@@ -2,32 +2,32 @@ module Calc_int = Calc.Calc(Calc.INT)
 module Calc_float = Calc.Calc(Calc.FLOAT)
 
 let () =
-	let print_calc a b sign r f_str =
+	let calc a b sign r f_str =
 		let b_str = 
 			if sign = "!" then 
 				""
-			else begin
-				let lst = String.split_on_char '.' (f_str b) in
-				if sign = "^" && List.length lst > 1 then
-					List.nth lst 0
-				else
-					f_str b
-			end
-		and s_str =
-			if sign = "!" then
-				sign 
-			else 
-				" " ^ sign ^ " "
-		in if r = None && sign <> "/" then
-			print_endline "Invalid operation"
-		else begin
-			print_string ((f_str a) ^ s_str ^ b_str ^ " = ");
-			if r <> None then
-				print_endline (f_str (Option.get r))
 			else
-				print_endline ("Division by zero")
-		end
-	in let print_calc_int a b_opt sign =
+				let lst = String.split_on_char '.' (f_str b) in
+				let str_of_b =
+					if sign = "^" && List.length lst > 1 then
+						List.nth lst 0
+					else
+						f_str b
+				in match str_of_b.[0] with
+					| '-' -> "(" ^ str_of_b ^ ")"
+					| _ -> str_of_b
+		and s_str =
+			match sign with
+				| "!" -> sign
+				| _ -> " " ^ sign ^ " "
+		in if r = None && sign <> "/" then
+			"Invalid operation"
+		else
+			let str = (f_str a) ^ s_str ^ b_str ^ " = " in
+			match r with
+				| Some r -> str ^ (f_str r)
+				| None -> str ^ "Division by zero"
+	in let calc_int a b_opt sign =
 		let b = 
 			Option.value ~default:0 b_opt 
 		in let r =
@@ -41,8 +41,8 @@ let () =
 					| "!" -> Some (Calc_int.fact a)
 					| _ -> None
 			with Division_by_zero -> None
-		in print_calc a b sign r string_of_int
-	and print_calc_float a b_opt sign =
+		in calc a b sign r string_of_int
+	and calc_float a b_opt sign =
 		let b =
 			Option.value ~default:0.0 b_opt
 		in let r =
@@ -54,72 +54,43 @@ let () =
 				| "^" -> Some (Calc_float.power a (int_of_float b))
 				| "!" -> Some (Calc_float.fact a)
 				| _ -> None
-		in print_calc a b sign r string_of_float
+		in calc a b sign r string_of_float
+	and print_calc calc_f a b c d e sign =
+		print_endline (calc_f a (Some b) sign);
+		print_endline (calc_f a (Some c) sign);
+		print_endline (calc_f a (Some d) sign);
+		print_endline (calc_f a (Some e) sign);
+		print_newline ();
 	in print_endline (string_of_int (Calc_int.power 3 3));
 	print_endline (string_of_float (Calc_float.power 3. 3));
 	print_endline (string_of_int (Calc_int.mul (Calc_int.add 20 1) 2));
 	print_endline (string_of_float (Calc_float.mul (Calc_float.add 20.0 1.0) 2.0));
-	print_endline "\n\n";
+	print_endline "\n";
 
-	print_calc_int 5 (Some 3) "+";
-	print_calc_int 5 (Some (-4)) "+";
-	print_calc_int 5 (Some Calc.INT.zero1) "+";
-	print_newline ();
+	let i0 : Calc_int.t = Calc.INT.zero1
+	and i02 : Calc_int.t = Calc.INT.zero2
+	and i1 : Calc_int.t = 5
+	and i2 : Calc_int.t = 3
+	and i3 : Calc_int.t = -4
+	and signs = ["+"; "-"; "*"; "/"; "^";] in
 
-	print_calc_int 5 (Some 3) "-";
-	print_calc_int 5 (Some (-4)) "-";
-	print_calc_int 5 (Some Calc.INT.zero1) "-";
-	print_newline ();
+	print_endline "Module Calc_int:";
+	List.iter (fun sgn -> print_calc calc_int i1 i2 i3 i0 i02 sgn) signs;
 
-	print_calc_int 5 (Some 3) "*";
-	print_calc_int 5 (Some (-4)) "*";
-	print_calc_int 5 (Some Calc.INT.zero2) "*";
-	print_newline ();
+	print_endline (calc_int i1 None "!");
+	print_endline (calc_int i0 None "!");
+	print_endline (calc_int i3 None "!");
+	print_endline "\n";
 
-	print_calc_int 5 (Some 3) "/";
-	print_calc_int 5 (Some 0) "/";
-	print_calc_int 5 (Some (-4)) "/";
-	print_calc_int 5 (Some Calc.INT.zero2) "/";
-	print_newline ();
+	let f0 : Calc_float.t = Calc.FLOAT.zero1
+	and f02 : Calc_float.t = Calc.FLOAT.zero2
+	and f1 : Calc_float.t = 5.3
+	and f2 : Calc_float.t = 3.9
+	and f3 : Calc_float.t = -4.2 in
 
-	print_calc_int 5 (Some 3) "^";
-	print_calc_int 5 (Some (-4)) "^";
-	print_calc_int 5 (Some Calc.INT.zero1) "^";
-	print_calc_int 5 (Some Calc.INT.zero2) "^";
-	print_newline ();
+	print_endline "Module Calc_float:";
+	List.iter (fun sgn -> print_calc calc_float f1 f2 f3 f0 f02 sgn) signs;
 
-	print_calc_int 5 None "!";
-	print_calc_int 0 None "!";
-	print_calc_int (-5) None "!";
-	print_endline "\n\n";
-
-	print_calc_float 5.3 (Some 3.9) "+";
-	print_calc_float 5.3 (Some (-4.2)) "+";
-	print_calc_float 5.3 (Some Calc.FLOAT.zero1) "+";
-	print_newline ();
-
-	print_calc_float 5.3 (Some 3.9) "-";
-	print_calc_float 5.3 (Some (-4.2)) "-";
-	print_calc_float 5.3 (Some Calc.FLOAT.zero1) "-";
-	print_newline ();
-
-	print_calc_float 5.3 (Some 3.9) "*";
-	print_calc_float 5.3 (Some (-4.2)) "*";
-	print_calc_float 5.3 (Some Calc.FLOAT.zero2) "*";
-	print_newline ();
-
-	print_calc_float 5.3 (Some 3.9) "/";
-	print_calc_float 5.3 (Some 0.0) "/";
-	print_calc_float 5.3 (Some (-4.2)) "/";
-	print_calc_float 5.3 (Some Calc.FLOAT.zero2) "/";
-	print_newline ();
-
-	print_calc_float 5.3 (Some 3.9) "^";
-	print_calc_float 5.3 (Some (-4.2)) "^";
-	print_calc_float 5.3 (Some Calc.FLOAT.zero1) "^";
-	print_calc_float 5.3 (Some Calc.FLOAT.zero2) "^";
-	print_newline ();
-
-	print_calc_float 5.3 None "!";
-	print_calc_float 0.0 None "!";
-	print_calc_float (-5.3) None "!";
+	print_endline (calc_float f1 None "!");
+	print_endline (calc_float f0 None "!");
+	print_endline (calc_float f3 None "!");

@@ -5,6 +5,13 @@ let () =
 		print_string (string_of_int b);
 		print_string " = ";
 		print_endline (string_of_int r);
+	in let print_hour_lst print lst =
+		let rec loop lst lst2 =
+			match lst, lst2 with
+				| a :: b, c :: d  -> (print a b; loop (a :: b) d)
+				| a :: b, [] -> loop b b
+				| [], _ -> print_newline ()
+		in loop lst lst
 	in let print_hour_add (a : Watchtower.Watchtower.hour) (b : Watchtower.Watchtower.hour) : unit =
 		print_hour a b " + " (Watchtower.Watchtower.add a b);
 	and print_hour_sub (a : Watchtower.Watchtower.hour) (b : Watchtower.Watchtower.hour) : unit =
@@ -13,26 +20,14 @@ let () =
 	and hour2 : Watchtower.Watchtower.hour = 4
 	and hour3 : Watchtower.Watchtower.hour = Watchtower.Watchtower.zero 
 	and hour4 : Watchtower.Watchtower.hour = 17 in
+	let hour_lst = [hour1; hour2; hour3; hour4] in
 
 	print_endline "Watchtower hours:";
 	print_endline ("zero: " ^ string_of_int Watchtower.Watchtower.zero);
 	print_newline ();
 
-	print_hour_add hour1 hour1;
-	print_hour_add hour1 hour2;
-	print_hour_add hour1 hour3;
-	print_hour_add hour1 hour4;
-	print_hour_add hour2 hour2;
-	print_hour_add hour2 hour3;
-	print_hour_add hour2 hour4;
-	print_hour_add hour3 hour4;
-	print_newline ();
+	print_endline "Addition of hours:";
+	print_hour_lst print_hour_add hour_lst;
 
-	print_hour_sub hour1 hour1;
-	print_hour_sub hour1 hour2;
-	print_hour_sub hour1 hour3;
-	print_hour_sub hour1 hour4;
-	print_hour_sub hour2 hour2;
-	print_hour_sub hour2 hour3;
-	print_hour_sub hour2 hour4;
-	print_hour_sub hour3 hour4;
+	print_endline "Subtraction of hours:";
+	print_hour_lst print_hour_sub hour_lst;

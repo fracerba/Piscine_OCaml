@@ -1,92 +1,73 @@
 module Try = Try.Try
 
 let () =
-	let print_try v f =
+	let string_of_try v f =
 		match v with
-			| Try.Success a -> print_endline ("Success: " ^ (f a))
-			| Try.Failure a -> print_endline ("Failure: " ^ (Printexc.to_string a))
-	in let print_try_int v =
-		print_try v string_of_int
-	and print_try_string v =
-		print_try v (fun x -> x)
-	in let print_try_try v f =
+			| Try.Success a -> ("  Success: " ^ (f a))
+			| Try.Failure a -> ("  Failure: " ^ (Printexc.to_string a))
+	in let string_of_try_int v =
+		string_of_try v string_of_int
+	and string_of_try_string v =
+		string_of_try v (fun x -> x)
+	in let string_of_try_try v f =
 		match v with
-			| Try.Success (Try.Success a) -> print_endline ("Success: (Success: " ^ (f a) ^ ")")
-			| Try.Success (Try.Failure a) -> print_endline ("Success: (Failure: " ^ (Printexc.to_string a) ^ ")")
-			| Try.Failure a -> print_endline ("Failure: " ^ (Printexc.to_string a))
-	in let print_try_try_int v =
-		print_try_try v string_of_int
-	and print_try_try_string v =
-		print_try_try v (fun x -> x)
-	in let num1 = Try.return 10
-	and num2 = Try.return 5
-	and num3 = Try.return 0 in
-	let lst = [num1; num2; num3] in
-	List.iter print_try_int lst;
-	print_newline ();
+			| Try.Success (Try.Success a) -> ("  Success: (Success: " ^ (f a) ^ ")")
+			| Try.Success (Try.Failure a) -> ("  Success: (Failure: " ^ (Printexc.to_string a) ^ ")")
+			| Try.Failure a -> ("  Failure: " ^ (Printexc.to_string a))
+	in let string_of_try_try_int v =
+		string_of_try_try v string_of_int
+	and string_of_try_try_string v =
+		string_of_try_try v (fun x -> x)
+	and print_try_lst to_str lst =
+		List.iter (fun x -> print_endline (to_str x)) lst;
+		print_newline ()
+	in let print_fun (f, str, prt) lst = 
+		print_endline ("Applying function: \"" ^ str ^ "\"");
+		print_try_lst prt (List.map f lst)
+	in let rec print_try f_lst e_lst f2 f3 =
+		let print_try_try lst (f1, str1, prt1) (f2, str2, prt2) =
+			print_fun (f1, str1, prt1) lst;
+			let lst1 = List.map f1 lst in
+			print_fun (f2, str2, prt2) lst1;
+		in let rec loop f_lst e_lst =
+			match f_lst with
+				| [] -> print_try_try e_lst f2 f3
+				| (f, str, prt) :: t -> (print_fun (f, str, prt) e_lst; loop t (List.map f e_lst))
+		in loop f_lst e_lst
+	in let int_lst = List.map Try.return [10; 5; 0] in
 
-	let fun1 x = Try.bind x (fun x -> Try.return (20 / x)) in
-	let lst = List.map (fun x -> fun1 x) lst in
-	List.iter print_try_int lst;
-	print_newline ();
+	print_endline "Module Try with integers:";
+	print_try_lst string_of_try_int int_lst;
 
-	let fun2 x = Try.bind x (fun x -> Try.return (x * 2)) in
-	let lst = List.map (fun x -> fun2 x) lst in
-	List.iter print_try_int lst;
-	print_newline ();
+	let int_fun_lst = [ 
+		((fun x -> Try.bind x (fun x -> Try.return (20 / x))), "20 / x", string_of_try_int);
+		((fun x -> Try.bind x (fun x -> Try.return (x * 2))), "x * 2", string_of_try_int);
+		((fun x -> Try.recover x (fun e -> Try.return 0)), "recover with 0", string_of_try_int);
+		((fun x -> Try.filter x (fun x -> x > 0)), "filter if x > 0", string_of_try_int);
+	]
+	and int_fun2 =
+		(Try.return, "return", string_of_try_try_int)
+	and int_fun3 =
+		(Try.flatten, "flatten", string_of_try_int)
+	in print_try int_fun_lst int_lst int_fun2 int_fun3;
+	print_endline "\n";
 
-	let fun3 x = Try.recover x (fun e -> Try.return 0) in
-	let lst = List.map (fun x -> fun3 x) lst in
-	List.iter print_try_int lst;
-	print_newline ();
+	let str_lst = List.map Try.return ["Cesare"; "Pompeo"; "Crasso"] in
 
-	let fun4 x = Try.filter x (fun x -> x > 0) in
-	let lst = List.map (fun x -> fun4 x) lst in
-	List.iter print_try_int lst;
-	print_newline ();
+	print_endline "Module Try with strings:";
+	print_try_lst string_of_try_string str_lst;
 
-	let fun5 x = Try.return x in
-	let lst = List.map (fun x -> fun5 x) lst in
-	List.iter print_try_try_int lst;
-	print_newline ();
-
-	let fun6 x = Try.flatten x in
-	let lst = List.map (fun x -> fun6 x) lst in
-	List.iter print_try_int lst;
-	print_endline "\n\n";
-
-	let str1 = Try.return "Cesare"
-	and str2 = Try.return "Pompeo"
-	and str3 = Try.return "Crasso" in
-	let lst = [str1; str2; str3] in
-	List.iter print_try_string lst;
-	print_newline ();
-
-	let fun1 x = Try.bind x (fun x -> Try.return (String.index x 'o')) in
-	let lst1 = List.map (fun x -> fun1 x) lst in
-	List.iter print_try_int lst1;
-	print_newline ();
-
-	let fun2 x = Try.bind x (fun x -> Try.return (String.sub x 0 (String.index x 'r'))) in
-	let lst = List.map (fun x -> fun2 x) lst in
-	List.iter print_try_string lst;
-	print_newline ();
-
-	let fun3 x = Try.recover x (fun e -> Try.return "Augusto") in
-	let lst = List.map (fun x -> fun3 x) lst in
-	List.iter print_try_string lst;
-	print_newline ();
-
-	let fun4 x = Try.filter x (fun x -> String.index x 's' > 2) in
-	let lst = List.map (fun x -> fun4 x) lst in
-	List.iter print_try_string lst;
-	print_newline ();
-
-	let fun5 x = Try.return x in
-	let lst = List.map (fun x -> fun5 x) lst in
-	List.iter print_try_try_string lst;
-	print_newline ();
-
-	let fun6 x = Try.flatten x in
-	let lst = List.map (fun x -> fun6 x) lst in
-	List.iter print_try_string lst;
+	let str_fun1 =
+		((fun x -> Try.bind x (fun x -> Try.return (String.index x 'o'))), "index of 'o'", string_of_try_int)
+	and str_fun_lst = [ 
+		((fun x -> Try.bind x (fun x -> Try.return (x ^ x))), "concatenate string with itself", string_of_try_string);
+		((fun x -> Try.bind x (fun x -> Try.return (String.sub x 0 (String.index x 'r')))), "substring until 'r'", string_of_try_string);
+		((fun x -> Try.recover x (fun e -> Try.return "Augusto")), "recover with \"Augusto\"", string_of_try_string);
+		((fun x -> Try.filter x (fun x -> String.index x 's' > 2)), "filter if index of 's' > 2", string_of_try_string);
+	]
+	and str_fun2 =
+		(Try.return, "return", string_of_try_try_string)
+	and str_fun3 =
+		(Try.flatten, "flatten", string_of_try_string)
+	in print_fun str_fun1 str_lst;
+	print_try str_fun_lst str_lst str_fun2 str_fun3;
