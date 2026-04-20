@@ -55,42 +55,53 @@ let () =
 				| "!" -> Some (Calc_float.fact a)
 				| _ -> None
 		in calc a b sign r string_of_float
-	and print_calc calc_f a b c d e sign =
-		print_endline (calc_f a (Some b) sign);
-		print_endline (calc_f a (Some c) sign);
-		print_endline (calc_f a (Some d) sign);
-		print_endline (calc_f a (Some e) sign);
-		print_newline ();
+	and print_operation sign =
+		match sign with
+			| "+" -> print_endline "Addition:"
+			| "-" -> print_endline "Subtraction:"
+			| "*" -> print_endline "Multiplication:"
+			| "/" -> print_endline "Division:"
+			| "^" -> print_endline "Power:"
+			| "!" -> print_endline "Factorial:"
+			| _ -> ()
+	in let print_calc calc_f lst sign =
+		print_operation sign;
+		let rec loop lst lst2 =
+			match lst, lst2 with
+				| a :: b, c :: d -> (print_endline (calc_f a (Some c) sign); loop (a :: b) d)
+				| a :: b, [] -> loop b b
+				| [], _ -> print_newline ()
+			in loop lst lst
 	in print_endline (string_of_int (Calc_int.power 3 3));
 	print_endline (string_of_float (Calc_float.power 3. 3));
 	print_endline (string_of_int (Calc_int.mul (Calc_int.add 20 1) 2));
 	print_endline (string_of_float (Calc_float.mul (Calc_float.add 20.0 1.0) 2.0));
 	print_endline "\n";
 
-	let i0 : Calc_int.t = Calc.INT.zero1
-	and i02 : Calc_int.t = Calc.INT.zero2
-	and i1 : Calc_int.t = 5
-	and i2 : Calc_int.t = 3
-	and i3 : Calc_int.t = -4
+	let i0 : Calc.INT.element = Calc.INT.zero1
+	and i02 : Calc.INT.element = Calc.INT.zero2
+	and i1 : Calc.INT.element = 5
+	and i2 : Calc.INT.element = 3
+	and i3 : Calc.INT.element = -4 in
+	let int_lst = [i1; i2; i3; i0; i02]
 	and signs = ["+"; "-"; "*"; "/"; "^";] in
 
 	print_endline "Module Calc_int:";
-	List.iter (fun sgn -> print_calc calc_int i1 i2 i3 i0 i02 sgn) signs;
+	List.iter (fun sgn -> print_calc calc_int int_lst sgn) signs;
 
-	print_endline (calc_int i1 None "!");
-	print_endline (calc_int i0 None "!");
-	print_endline (calc_int i3 None "!");
+	print_operation "!";
+	List.iter (fun nmb -> print_endline (calc_int nmb None "!")) int_lst;
 	print_endline "\n";
 
-	let f0 : Calc_float.t = Calc.FLOAT.zero1
-	and f02 : Calc_float.t = Calc.FLOAT.zero2
-	and f1 : Calc_float.t = 5.3
-	and f2 : Calc_float.t = 3.9
-	and f3 : Calc_float.t = -4.2 in
+	let f0 : Calc.FLOAT.element = Calc.FLOAT.zero1
+	and f02 : Calc.FLOAT.element = Calc.FLOAT.zero2
+	and f1 : Calc.FLOAT.element = 5.3
+	and f2 : Calc.FLOAT.element = 3.9
+	and f3 : Calc.FLOAT.element = -4.2 in
+	let float_lst = [f1; f2; f3; f0; f02] in
 
 	print_endline "Module Calc_float:";
-	List.iter (fun sgn -> print_calc calc_float f1 f2 f3 f0 f02 sgn) signs;
+	List.iter (fun sgn -> print_calc calc_float float_lst sgn) signs;
 
-	print_endline (calc_float f1 None "!");
-	print_endline (calc_float f0 None "!");
-	print_endline (calc_float f3 None "!");
+	print_operation "!";
+	List.iter (fun nmb -> print_endline (calc_float nmb None "!")) float_lst

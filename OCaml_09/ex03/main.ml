@@ -43,7 +43,7 @@ let () =
 		((fun x -> Try.bind x (fun x -> Try.return (20 / x))), "20 / x", string_of_try_int);
 		((fun x -> Try.bind x (fun x -> Try.return (x * 2))), "x * 2", string_of_try_int);
 		((fun x -> Try.recover x (fun e -> Try.return 0)), "recover with 0", string_of_try_int);
-		((fun x -> Try.filter x (fun x -> x > 0)), "filter if x > 0", string_of_try_int);
+		((fun x -> Try.filter x (fun x -> x < 5)), "filter if x < 5", string_of_try_int);
 	]
 	and int_fun2 =
 		(Try.return, "return", string_of_try_try_int)
