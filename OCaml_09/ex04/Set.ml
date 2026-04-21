@@ -2,7 +2,7 @@ module type SET =
 sig
 	type 'a t
 	val return : 'a -> 'a t
-	val bind : 'a t -> ('a -> 'b) -> 'b t
+	val bind : 'a t -> ('a -> 'b t) -> 'b t
 	val union : 'a t -> 'a t -> 'a t
 	val inter : 'a t -> 'a t -> 'a t
 	val diff : 'a t -> 'a t -> 'a t
@@ -19,47 +19,27 @@ struct
 	let return (e : 'a) : 'a t =
 		[e]
 
-	let bind (a : 'a t) (f : ('a -> 'b)) : 'b t =
-		let rec loop a acc =
-			match a with
-				| [] -> acc
-				| h :: t when List.mem (f h) acc -> loop t acc
-				| h :: t -> loop t (f h :: acc)
-		in loop a []
+	let bind (a : 'a t) (f : ('a -> 'b t)) : 'b t =
+		List.sort_uniq compare (List.flatten (List.map f a))
 
 	let union (a : 'a t) (b : 'a t) : 'a t =
-		let rec loop a b acc =
-			match a, b with
-				| [], [] -> acc
-				| [], h :: t -> loop [] t (h :: acc)
-				| h :: t, [] -> loop t [] (h :: acc)
-				| h1 :: t1, h2 :: t2 when h1 = h2 -> loop t1 t2 (h1 :: acc)
-				| h1 :: t1, h2 :: t2 when h1 < h2 -> loop t1 b (h1 :: acc)
-				| h1 :: t1, h2 :: t2 -> loop a t2 (h2 :: acc)
-		in loop a b []
-
-	let inter (a : 'a t) (b : 'a t) : 'a t =
-		let rec loop a b acc =
-			match a with
-				| [] -> acc
-				| h :: t when List.mem h b -> loop t b (h :: acc)
-				| h :: t -> loop t b acc
-		in loop a b []
-
-	let diff (a : 'a t) (b : 'a t) : 'a t =
-		let check h acc =
-			not (List.mem h acc)
+		let new_b = 
+			List.filter (fun x -> not (List.mem x a)) b
 		in let rec loop a b acc =
 			match a, b with
-				| [], [] -> acc
-				| [], h :: t when check h acc -> loop [] t (h :: acc)
-				| h :: t, [] when check h acc -> loop t [] (h :: acc)
-				| [], h :: t -> loop [] t acc
-				| h :: t, [] -> loop t [] acc
-				| h1 :: t1, h2 :: t2 when h1 < h2 && check h1 acc -> loop t1 b (h1 :: acc)
-				| h1 :: t1, h2 :: t2 when h1 > h2 && check h2 acc -> loop a t2 (h2 :: acc)
+				| [], [] -> List.rev acc
+				| [], h :: t -> loop [] t (h :: acc)
+				| h :: t, [] -> loop t [] (h :: acc)
+				| h1 :: t1, h2 :: t2 when h1 > h2 -> loop a t2 (h2 :: acc)
+				| h1 :: t1, h2 :: t2 when h1 < h2 -> loop t1 b (h1 :: acc)
 				| h1 :: t1, h2 :: t2 -> loop t1 t2 acc
-		in loop a b []
+		in loop a new_b []
+
+	let inter (a : 'a t) (b : 'a t) : 'a t =
+		List.filter (fun x -> List.mem x b) a
+
+	let diff (a : 'a t) (b : 'a t) : 'a t =
+		List.filter (fun x -> not (List.mem x b)) a
 
 	let filter (a : 'a t) (f : ('a -> bool)) : 'a t =
 		List.filter f a
