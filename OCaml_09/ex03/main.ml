@@ -34,7 +34,9 @@ let () =
 				| [] -> print_try_try e_lst f2 f3
 				| (f, str, prt) :: t -> (print_fun (f, str, prt) e_lst; loop t (List.map f e_lst))
 		in loop f_lst e_lst
-	in let int_lst = List.map Try.return [10; 5; 0] in
+	in let int_lst = 
+		List.map Try.return [10; 5; 0] 
+	in
 
 	print_endline "Module Try with integers:";
 	print_try_lst string_of_try_int int_lst;
@@ -52,7 +54,9 @@ let () =
 	in print_try int_fun_lst int_lst int_fun2 int_fun3;
 	print_endline "\n";
 
-	let str_lst = List.map Try.return ["Cesare"; "Pompeo"; "Crasso"] in
+	let str_lst = 
+		List.map Try.return ["Cesare"; "Pompeo"; "Crasso"]
+	in
 
 	print_endline "Module Try with strings:";
 	print_try_lst string_of_try_string str_lst;
