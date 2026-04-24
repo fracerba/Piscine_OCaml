@@ -22,7 +22,7 @@ let () =
 		List.iter (fun x -> print_endline (to_str x)) lst;
 		print_newline ()
 	in let print_fun (f, str, prt) lst = 
-		print_endline ("Applying function: \"" ^ str ^ "\"");
+		print_endline ("Applying function: " ^ str);
 		print_try_lst prt (List.map f lst)
 	in let rec print_try f_lst e_lst f2 f3 =
 		let print_try_try lst (f1, str1, prt1) (f2, str2, prt2) =
@@ -42,15 +42,15 @@ let () =
 	print_try_lst string_of_try_int int_lst;
 
 	let int_fun_lst = [ 
-		((fun x -> Try.bind x (fun x -> Try.return (20 / x))), "20 / x", string_of_try_int);
-		((fun x -> Try.bind x (fun x -> Try.return (x * 2))), "x * 2", string_of_try_int);
-		((fun x -> Try.recover x (fun e -> Try.return 0)), "recover with 0", string_of_try_int);
-		((fun x -> Try.filter x (fun x -> x < 5)), "filter if x < 5", string_of_try_int);
+		((fun x -> Try.bind x (fun x -> Try.return (20 / x))), "Try.bind (20 / n)", string_of_try_int);
+		((fun x -> Try.bind x (fun x -> Try.return (x * 2))), "Try.bind (n * 2)", string_of_try_int);
+		((fun x -> Try.recover x (fun e -> Try.return 0)), "Try.recover (with 0)", string_of_try_int);
+		((fun x -> Try.filter x (fun x -> x < 5)), "Try.filter (n < 5)", string_of_try_int);
 	]
 	and int_fun2 =
-		(Try.return, "return", string_of_try_try_int)
+		(Try.return, "Try.return", string_of_try_try_int)
 	and int_fun3 =
-		(Try.flatten, "flatten", string_of_try_int)
+		(Try.flatten, "Try.flatten", string_of_try_int)
 	in print_try int_fun_lst int_lst int_fun2 int_fun3;
 	print_endline "\n";
 
@@ -62,16 +62,16 @@ let () =
 	print_try_lst string_of_try_string str_lst;
 
 	let str_fun1 =
-		((fun x -> Try.bind x (fun x -> Try.return (String.index x 'o'))), "index of 'o'", string_of_try_int)
+		((fun x -> Try.bind x (fun x -> Try.return (String.index x 'o'))), "Try.bind (index of 'o')", string_of_try_int)
 	and str_fun_lst = [ 
-		((fun x -> Try.bind x (fun x -> Try.return (x ^ x))), "concatenate string with itself", string_of_try_string);
-		((fun x -> Try.bind x (fun x -> Try.return (String.sub x 0 (String.index x 'r')))), "substring until 'r'", string_of_try_string);
-		((fun x -> Try.recover x (fun e -> Try.return "Augusto")), "recover with \"Augusto\"", string_of_try_string);
-		((fun x -> Try.filter x (fun x -> String.index x 's' > 2)), "filter if index of 's' > 2", string_of_try_string);
+		((fun x -> Try.bind x (fun x -> Try.return (x ^ x))), "Try.bind (str ^ str)", string_of_try_string);
+		((fun x -> Try.bind x (fun x -> Try.return (String.sub x 0 (String.index x 'r')))), "Try.bind (substring until 'r')", string_of_try_string);
+		((fun x -> Try.recover x (fun e -> Try.return "Augusto")), "Try.recover (with \"Augusto\")", string_of_try_string);
+		((fun x -> Try.filter x (fun x -> String.index x 's' > 2)), "Try.filter (index of 's' > 2)", string_of_try_string);
 	]
 	and str_fun2 =
-		(Try.return, "return", string_of_try_try_string)
+		(Try.return, "Try.return", string_of_try_try_string)
 	and str_fun3 =
-		(Try.flatten, "flatten", string_of_try_string)
+		(Try.flatten, "Try.flatten", string_of_try_string)
 	in print_fun str_fun1 str_lst;
 	print_try str_fun_lst str_lst str_fun2 str_fun3;
