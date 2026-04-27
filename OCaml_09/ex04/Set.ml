@@ -23,17 +23,15 @@ struct
 		List.sort_uniq compare (List.flatten (List.map f a))
 
 	let union (a : 'a t) (b : 'a t) : 'a t =
-		let new_b = 
-			List.filter (fun x -> not (List.mem x a)) b
-		in let rec loop a b acc =
+		let rec loop a b acc =
 			match a, b with
 				| [], [] -> List.rev acc
 				| [], h :: t -> loop [] t (h :: acc)
 				| h :: t, [] -> loop t [] (h :: acc)
 				| h1 :: t1, h2 :: t2 when h1 > h2 -> loop a t2 (h2 :: acc)
 				| h1 :: t1, h2 :: t2 when h1 < h2 -> loop t1 b (h1 :: acc)
-				| h1 :: t1, h2 :: t2 -> loop t1 t2 acc
-		in loop a new_b []
+				| h1 :: t1, h2 :: t2 -> loop t1 t2 (h1 :: acc)
+		in loop a b []
 
 	let inter (a : 'a t) (b : 'a t) : 'a t =
 		List.filter (fun x -> List.mem x b) a

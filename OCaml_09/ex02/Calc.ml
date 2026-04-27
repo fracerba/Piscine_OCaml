@@ -58,7 +58,7 @@ module Calc : CALC =
 				if n < 0 then
 					M.zero1
 				else if n = 0 then
-					M.mul acc M.zero2
+					acc
 				else
 					loop (n - 1) (M.mul acc a)
 			in loop n M.zero2
@@ -67,7 +67,7 @@ module Calc : CALC =
 			let rec loop n acc =
 				if n < M.zero1 then
 					M.zero1
-				else if n = M.zero1 || n < M.zero2 then
+				else if n <= M.zero2 then
 					acc
 				else
 					loop (M.sub n M.zero2) (M.mul acc n)
