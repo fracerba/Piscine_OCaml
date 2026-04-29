@@ -26,18 +26,36 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 				| h :: t -> f h;
 					self#destroy_army (army#delete) f species
 
-		method private recreate_army army lst =
+		method private recreate_army lst =
 			List.fold_left (fun acc p -> acc#add p) (new Army.army []) lst
 
-		method private damage_doctor army doc =
+		method private attack_daleks daleks doctors =
+			let attack_dalek n lst =
+				let d = List.nth lst (Random.int (List.length lst)) in
+				if self#extract_shield (d#to_string) then begin
+					(List.nth doctors#get_members n)#use_sonic_screwdriver;
+					List.filter (fun x -> x#to_string <> d#to_string) lst
+				end
+				else
+					lst
+			in let rec loop lst n =
+				if n < 0 then begin
+					print_newline ();
+					self#recreate_army lst
+				end
+				else
+					loop (attack_dalek n lst) (n - 1)
+			in loop (List.rev daleks#get_members) ((List.length doctors#get_members) - 1)
+
+		method private damage_doctors_army doctors daleks =
 			let damage d =
-				if d#to_string = doc#to_string then
+				if Random.bool () then begin
+					print_endline ("Exterminate!");
 					d#take_damage (10 + Random.int 111)
+				end
 				else
 					d
-			in let new_army =
-				List.map damage (List.rev army#get_members)
-			in self#recreate_army new_army
+			in self#recreate_army (List.map damage (List.rev doctors#get_members))
 
 		method private exterminate_peoples_army peoples daleks =
 			let exterminate_people n lst =
@@ -61,6 +79,40 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 		method private check_alive (entities) =
 			List.length entities#get_members <> 0
 
-		method do_time_war = 
+		method private print_armies peoples doctors daleks =
+			print_endline "Peoples:";
+			self#list_iter (fun p -> print_endline (p#to_string)) peoples;
+			print_endline "Doctors:";
+			self#list_iter (fun d -> print_endline (d#to_string)) doctors;
+			print_endline "Daleks:";
+			self#list_iter (fun d -> print_endline (d#to_string)) daleks
+
+		method private simulate_war peoples doctors daleks =
+			if not (self#check_alive peoples) || not (self#check_alive doctors) then
+				print_endline "The Daleks have won the Time War!"
+			else if not (self#check_alive daleks) then
+				print_endline "The Doctors and Peoples have won the Time War!"
+			else begin
+				self#print_armies peoples doctors daleks;
+				if Random.bool () then begin
+					print_endline "The Doctors are attacking the Daleks!";
+					self#simulate_war peoples doctors (self#attack_daleks daleks doctors)
+				end
+				else
+					if Random.bool () then begin
+						print_endline "The Daleks are attacking the Doctors!";
+						self#simulate_war peoples (self#damage_doctors_army doctors daleks) daleks 
+					end 
+					else begin
+						print_endline "The Daleks are attacking the Peoples!";
+						self#simulate_war (self#exterminate_peoples_army peoples daleks) doctors daleks
+					end
+			end
+
+		method do_time_war =
+			let peoples_army = self#build_army (new Army.army []) people "people"
+			and doctors_army = self#build_army (new Army.army []) doctors "doctors"
+			and daleks_army = self#build_army (new Army.army []) daleks "daleks" in
 			print_endline "The Time War has begun!";
+			self#simulate_war peoples_army doctors_army daleks_army
 end
