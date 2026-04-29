@@ -40,16 +40,16 @@ class doctor (nm : string) (old : int) (sdk : People.people) =
 			print_endline ("  |  | '-----------''-----------' |  |");
 			print_endline (" _|__|/__________________________\\|__|_");
 			print_endline ("'----'----------------------------'----'");
-			{< age = age + abs (arrival - start) >}
+			{< age = age >}
 		method use_sonic_screwdriver = print_endline ("Whiiiiwhiiiwhiii Whiiiiwhiiiwhiii Whiiiiwhiiiwhiii")
 		method private regenerate = {< hp = 100 >}
 		method take_damage (damage : int) = 
 			if damage >= hp then begin
-				print_endline ("The Doctor took " ^ string_of_int damage ^ " damage and regenerated!");
+				print_endline (name ^ " took " ^ string_of_int damage ^ " damage and regenerated!");
 				self#regenerate
 			end
 			else begin
-				print_endline ("The Doctor took " ^ string_of_int damage ^ " damage and has " ^ string_of_int (hp - damage) ^ " hp left.");
+				print_endline (name ^ " took " ^ string_of_int damage ^ " damage and has " ^ string_of_int (hp - damage) ^ " hp left.");
 				{< hp = hp - damage >}
 			end
 	end

@@ -1,14 +1,16 @@
 let extract_name (s : string) =
 	String.sub s (String.index s ':' + 2) (String.index s '|' - String.index s ':' - 3)
 
+let list_init lst f =
+	List.init (List.length lst) (fun i -> f i)
+
 let list_iter f lst =
 	List.iter f (List.rev lst#get_members);
 	print_newline ()
 
 let rec build_army army lst species =
 	match lst with
-		| [] -> print_newline ();
-			army
+		| [] -> (print_newline (); army)
 		| h :: t -> print_endline (extract_name (h#to_string) ^ " has joined the " ^ species ^ " army!");
 			build_army (army#add h) t species
 
@@ -21,35 +23,40 @@ let rec destroy_army army f (species : string) =
 let damage_doctors_army army =
 	let rec loop lst acc =
 		match lst with
-			| [] -> print_newline ();
-				acc
+			| [] -> (print_newline (); acc)
 			| h :: t -> loop t (acc#add (h#take_damage (10 + Random.int 111)))
 	in loop (List.rev army#get_members) (new Army.army [])
 
 let exterminate_peoples_army peoples daleks =
-	let exterminate_people p acc =
+	let exterminate_people n lst =
 		if Random.bool () then begin
+			let p = List.nth lst (Random.int (List.length lst)) in
 			print_endline ("Exterminate!");
-			(List.nth daleks#get_members (Random.int (List.length daleks#get_members)))#exterminate p;
-			acc
+			(List.nth daleks#get_members n)#exterminate p;
+			List.filter (fun x -> x#to_string <> p#to_string) lst
 		end
 		else
-			acc#add p
-	in let rec loop lst acc =
-		match lst with
-			| [] -> print_newline ();
-				acc
-			| h :: t -> loop t (exterminate_people h acc)
-	in loop (List.rev peoples#get_members) (new Army.army [])
+			lst
+	in let rec loop lst n =
+		if n < 0 then begin
+			print_newline ();
+			List.fold_left (fun acc p -> acc#add p) (new Army.army []) lst
+		end
+		else
+			loop (exterminate_people n lst) (n - 1)
+	in loop (List.rev peoples#get_members) ((List.length daleks#get_members) - 1)
 
 let () = 
 	let peoples_names = ["Donna Noble"; "Amy Pond"; "Rory Williams"; "Rose Tyler"; "Clara Oswald";] in
-	let peoples = List.init 5 (fun i -> new People.people (List.nth peoples_names i)) in
+	let peoples_fun i = new People.people (List.nth peoples_names i) in
+	let peoples = list_init peoples_names peoples_fun in
 	print_newline ();
 
 	let doctors_names = ["The Ninth Doctor"; "The Tenth Doctor"; "The Eleventh Doctor";] in
-	let doctors = List.init 3 (fun i -> new Doctor.doctor (List.nth doctors_names i) (1200 + i * 300) (List.nth peoples i)) in
+	let doctors_fun i = new Doctor.doctor (List.nth doctors_names i) (1200 + i * 300) (List.nth peoples i) in
+	let doctors = list_init doctors_names doctors_fun in
 	print_newline ();
+
 	let daleks = List.init 5 (fun _ -> new Dalek.dalek) in
 
 	let peoples_army = build_army (new Army.army []) peoples "People" in
@@ -76,4 +83,7 @@ let () =
 	destroy_army daleks_army (fun d -> d#die) "Dalek";
 	destroy_army peoples_army2 (fun p -> p#die) "People";
 	let year = Random.int 100001 in
-	destroy_army doctors_army2 (fun d -> d#travel_in_time year ((Random.int 1300000) - 250000)) "Doctor";
+	let time_travel d =
+		d#travel_in_time year ((Random.int 1300000) - 250000);
+		print_newline ();
+	in destroy_army doctors_army2 time_travel "Doctor";

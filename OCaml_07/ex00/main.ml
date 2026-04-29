@@ -12,4 +12,4 @@ let () =
 	print_newline ();
 
 	people1#die;
-	people2#die
+	people2#die;

@@ -24,6 +24,8 @@ let () =
 	print_endline people2#to_string;
 	print_endline people3#to_string;
 	print_endline people4#to_string;
+	print_newline ();
+
 	print_endline dalek#to_string;
 	print_newline ();
 
@@ -43,6 +45,8 @@ let () =
 
 	dalek#exterminate people2;
 	print_endline dalek#to_string;
+	print_newline ();
+
 	dalek#exterminate people3;
 	print_endline dalek#to_string;
 	print_newline ();
