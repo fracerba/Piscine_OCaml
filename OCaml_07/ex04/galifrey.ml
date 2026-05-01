@@ -9,53 +9,44 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 			let ridx = String.rindex s ':' in
 			bool_of_string (String.sub s (ridx + 2) (String.length s - ridx - 2))
 
-		method private build_people_army lst species : People.people Army.army =
+		method private build_people_army lst : People.people Army.army =
 			let extract_name c =
 				let s = c#to_string in
 				let idx = String.index s ':' in
 				String.sub s (idx + 2) (String.index s '|' - idx - 3)
 			in let print h =
-				print_endline (extract_name h ^ " has joined the " ^ species ^ " army!");
+				print_endline (extract_name h ^ " has joined the People army!");
 			in let rec loop army lst =
 				match lst with
 					| [] -> (print_newline (); army)
 					| h :: t -> (print h; loop (army#add h) t)
 			in loop (new Army.army []) lst
 
-		method private build_doctors_army lst species : Doctor.doctor Army.army =
+		method private build_doctors_army lst : Doctor.doctor Army.army =
 			let extract_name c =
 				let s = c#to_string in
 				let idx = String.index s ':' in
 				String.sub s (idx + 2) (String.index s '|' - idx - 3)
 			in let print h =
-				print_endline (extract_name h ^ " has joined the " ^ species ^ " army!");
+				print_endline (extract_name h ^ " has joined the Doctor army!");
 			in let rec loop army lst =
 				match lst with
 					| [] -> (print_newline (); army)
 					| h :: t -> (print h; loop (army#add h) t)
 			in loop (new Army.army []) lst
 
-		method private build_daleks_army lst species : Dalek.dalek Army.army =
+		method private build_daleks_army lst : Dalek.dalek Army.army =
 			let extract_name c =
 				let s = c#to_string in
 				let idx = String.index s ':' in
 				String.sub s (idx + 2) (String.index s '|' - idx - 3)
 			in let print h =
-				print_endline (extract_name h ^ " has joined the " ^ species ^ " army!");
+				print_endline (extract_name h ^ " has joined the Dalek army!");
 			in let rec loop army lst =
 				match lst with
 					| [] -> (print_newline (); army)
 					| h :: t -> (print h; loop (army#add h) t)
 			in loop (new Army.army []) lst
-
-		method private destroy_army army f (species : string) : unit =
-			match army#get_members with
-				| [] -> print_endline ("The " ^ species ^ " army is completely destroyed!\n")
-				| h :: t -> f h;
-					self#destroy_army (army#delete) f species
-
-		method private recreate_army (lst : 'a list) : 'a Army.army =
-			List.fold_left (fun acc p -> acc#add p) (new Army.army []) lst
 
 		method private attack_daleks (doctors : Doctor.doctor Army.army) (daleks : Dalek.dalek Army.army) : Dalek.dalek Army.army =
 			let recreate_army lst =
@@ -142,9 +133,9 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 					List.iter (fun p -> print_endline (p#to_string)) lst;
 					print_newline ()
 				end
-			in let people_list = peoples#get_members in
-			let doctor_list = doctors#get_members in
-			let dalek_list = daleks#get_members in
+			in let people_list = List.rev peoples#get_members in
+			let doctor_list = List.rev doctors#get_members in
+			let dalek_list = List.rev daleks#get_members in
 
 			if people_list <> [] then
 				print_species "Peoples" people_list;
@@ -177,9 +168,9 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 			end
 
 		method do_time_war =
-			let peoples_army = self#build_people_army people "people" in
-			let doctors_army = self#build_doctors_army doctors "doctors" in
-			let daleks_army = self#build_daleks_army daleks "daleks" in
+			let peoples_army = self#build_people_army people in
+			let doctors_army = self#build_doctors_army doctors in
+			let daleks_army = self#build_daleks_army daleks in
 			print_endline "THE TIME WAR HAS BEGUN!\n";
 			self#simulate_war peoples_army doctors_army daleks_army
-end
+	end
