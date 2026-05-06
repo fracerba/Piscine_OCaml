@@ -46,7 +46,9 @@ let exterminate_peoples_army peoples daleks =
 			loop (exterminate_people n lst) (n - 1)
 	in loop (List.rev peoples#get_members) ((List.length daleks#get_members) - 1)
 
-let () = 
+let () =
+	Random.self_init ();
+
 	let peoples_names = ["Donna Noble"; "Amy Pond"; "Rory Williams"; "Rose Tyler"; "Clara Oswald";] in
 	let peoples_fun i = new People.people (List.nth peoples_names i) in
 	let peoples = list_init peoples_names peoples_fun in

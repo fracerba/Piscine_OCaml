@@ -4,18 +4,19 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 		val doctors : Doctor.doctor list = doctors
 		val people : People.people list = peoples
 
+		method private join_army (str : string) (spc : string) : unit =
+			let idx = String.index str ':' in
+			let name = String.sub str (idx + 2) (String.index str '|' - idx - 3) in
+			print_endline (name ^ " has joined the " ^ spc ^ " army!")
+
 		method private extract_shield (d : Dalek.dalek) : bool =
 			let s = d#to_string in
 			let ridx = String.rindex s ':' in
 			bool_of_string (String.sub s (ridx + 2) (String.length s - ridx - 2))
 
 		method private build_people_army lst : People.people Army.army =
-			let extract_name c =
-				let s = c#to_string in
-				let idx = String.index s ':' in
-				String.sub s (idx + 2) (String.index s '|' - idx - 3)
-			in let print h =
-				print_endline (extract_name h ^ " has joined the People army!");
+			let print h =
+				self#join_army h#to_string "People"
 			in let rec loop army lst =
 				match lst with
 					| [] -> (print_newline (); army)
@@ -23,12 +24,8 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 			in loop (new Army.army []) lst
 
 		method private build_doctors_army lst : Doctor.doctor Army.army =
-			let extract_name c =
-				let s = c#to_string in
-				let idx = String.index s ':' in
-				String.sub s (idx + 2) (String.index s '|' - idx - 3)
-			in let print h =
-				print_endline (extract_name h ^ " has joined the Doctor army!");
+			let print h =
+				self#join_army h#to_string "Doctor"
 			in let rec loop army lst =
 				match lst with
 					| [] -> (print_newline (); army)
@@ -36,12 +33,8 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 			in loop (new Army.army []) lst
 
 		method private build_daleks_army lst : Dalek.dalek Army.army =
-			let extract_name c =
-				let s = c#to_string in
-				let idx = String.index s ':' in
-				String.sub s (idx + 2) (String.index s '|' - idx - 3)
-			in let print h =
-				print_endline (extract_name h ^ " has joined the Dalek army!");
+			let print h =
+				self#join_army h#to_string "Dalek"
 			in let rec loop army lst =
 				match lst with
 					| [] -> (print_newline (); army)
@@ -50,6 +43,10 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 
 		method private attack_daleks (doctors : Doctor.doctor Army.army) (daleks : Dalek.dalek Army.army) : Dalek.dalek Army.army =
 			let recreate_army lst =
+				if lst = [] then
+					print_endline ("\nThe Dalek army is completely destroyed!\n")
+				else
+					print_newline ();
 				List.fold_left (fun acc p -> acc#add p) (new Army.army []) lst
 			in let attack_dalek n lst =
 				let dal = List.nth lst (Random.int (List.length lst)) in
@@ -62,16 +59,18 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 				else
 					lst
 			in let rec loop lst n =
-				if n < 0 || lst = [] then begin
-					print_newline ();
+				if n < 0 || lst = [] then 
 					recreate_army lst
-				end
 				else
 					loop (attack_dalek n lst) (n - 1)
 			in loop (List.rev daleks#get_members) ((List.length doctors#get_members) - 1)
 
 		method private damage_doctors_army (doctors : Doctor.doctor Army.army) (daleks : Dalek.dalek Army.army) : Doctor.doctor Army.army =
 			let recreate_army lst =
+				if lst = [] then
+					print_endline ("\nThe Doctor army is completely destroyed!\n")
+				else
+					print_newline ();
 				List.fold_left (fun acc p -> acc#add p) (new Army.army []) lst
 			in let damage doc d =
 				if d#to_string = doc#to_string then
@@ -87,16 +86,18 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 				else
 					lst
 			in let rec loop lst n =
-				if n < 0 || lst = [] then begin
-					print_newline ();
+				if n < 0 || lst = [] then
 					recreate_army lst
-				end
 				else
 					loop (damage_doctors lst) (n - 1)
 			in loop (List.rev doctors#get_members) ((List.length daleks#get_members) - 1)
 
 		method private exterminate_peoples_army (peoples : People.people Army.army) (daleks : Dalek.dalek Army.army) : People.people Army.army =
 			let recreate_army lst =
+				if lst = [] then
+					print_endline ("\nThe People army is completely destroyed!\n")
+				else
+					print_newline ();
 				List.fold_left (fun acc p -> acc#add p) (new Army.army []) lst
 			in let exterminate_people n lst =
 				print_endline ("Exterminate!");
@@ -109,10 +110,8 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 				else
 					lst
 			in let rec loop lst n =
-				if n < 0 || lst = [] then begin
-					print_newline ();
+				if n < 0 || lst = [] then
 					recreate_army lst
-				end
 				else
 					loop (exterminate_people n lst) (n - 1)
 			in loop (List.rev peoples#get_members) ((List.length daleks#get_members) - 1)
@@ -133,16 +132,9 @@ class galifrey (peoples : People.people list) (doctors : Doctor.doctor list) (da
 					List.iter (fun p -> print_endline (p#to_string)) lst;
 					print_newline ()
 				end
-			in let people_list = List.rev peoples#get_members in
-			let doctor_list = List.rev doctors#get_members in
-			let dalek_list = List.rev daleks#get_members in
-
-			if people_list <> [] then
-				print_species "Peoples" people_list;
-			if doctor_list <> [] then
-				print_species "Doctors" doctor_list;
-			if dalek_list <> [] then
-				print_species "Daleks" dalek_list;
+			in print_species "Peoples" (List.rev peoples#get_members);
+			print_species "Doctors" (List.rev doctors#get_members);
+			print_species "Daleks" (List.rev daleks#get_members)
 
 		method private simulate_war (peoples : People.people Army.army) (doctors : Doctor.doctor Army.army) (daleks : Dalek.dalek Army.army) =
 			self#print_armies peoples doctors daleks;
