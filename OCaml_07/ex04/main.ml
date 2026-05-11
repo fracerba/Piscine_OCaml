@@ -10,7 +10,7 @@ let init_armies peoples doctors daleks =
 			List.nth new_peoples i
 		else
 			List.nth new_peoples (Random.int (List.length new_peoples))
-		in let doctors_fun i = new Doctor.doctor (List.nth doctors i) (1000 + i * 300) (sidekick_fun i) in
+	in let doctors_fun i = new Doctor.doctor (List.nth doctors i) (1000 + i * 300) (sidekick_fun i) in
 	let new_doctors = list_init doctors doctors_fun in
 	print_newline ();
 
